@@ -1,0 +1,44 @@
+﻿@model IEnumerable<Diplom.Models.PreviousBalance>
+
+<p>
+    <a asp-controller="VaultNotes" asp-action="Index" asp-route-IdVault="@ViewBag.IdVault">Вернуться к списку</a>
+</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Продукт
+            </th>
+            <th>
+                Начальный остаток
+            </th>
+            
+            <th>
+                Конечный остаток
+            </th>
+            
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @item.Food.NameFood
+            </td>
+            <td>
+                @item.StartBalance
+            </td>
+            <td>
+                @item.EndBalance
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Редактировать</a> 
+               
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+

@@ -1,0 +1,37 @@
+﻿@model Diplom.Models.ChildHouse
+
+
+
+<h4>Редактирование</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="IdVaultNote" />
+            <div class="form-group">
+                <label asp-for="NameHouse" class="control-label">Название</label>
+                <input asp-for="NameHouse" class="form-control" />
+                <span asp-validation-for="NameHouse" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ChildCount" class="control-label">Количество детей</label>
+                <input asp-for="ChildCount" type="number" class="form-control" />
+                <span asp-validation-for="ChildCount" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Сохранить" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Вернуться</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+

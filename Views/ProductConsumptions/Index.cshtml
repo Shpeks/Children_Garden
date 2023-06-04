@@ -1,0 +1,61 @@
+﻿@model IEnumerable<Diplom.Models.ProductConsumption>
+
+
+
+<p>
+    <a asp-action="Index" asp-controller="ChildHouses" asp-route-idVaultNote="@ViewBag.IdVaultNote">Редактирование количества детей</a>
+</p>
+<p>
+    <a asp-controller="VaultNotes" asp-action="Index" asp-route-IdVault="@ViewBag.IdVault">Вернуться к списку</a>
+</p>
+@{
+    DateTime date = DateTime.MinValue; // Инициализируем переменную даты
+}
+
+@if (Model.Any())
+{
+    date = Model.First().Date; // Присваиваем переменной значение даты из первого элемента
+
+    <h5>Дата: @date.ToString("dd.MM.yyyy")</h5>
+}
+<table class="table">
+    <thead>
+        <tr>
+
+            <th>
+                Название продукта
+            </th>
+            <th>
+                Количество продуктов на сад
+            </th>
+            <th>
+                Количество продуктов на ясли
+            </th>
+
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @item.Food.NameFood
+                </td>
+                <td>
+                    @item.FoodCountChild
+                </td>
+                <td>
+                    @item.FoodCountKid
+                </td>
+
+
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Редактировать</a>
+
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+

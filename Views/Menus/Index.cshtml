@@ -1,0 +1,55 @@
+﻿@model IEnumerable<Diplom.Models.Menu>
+
+
+<p>
+    <a asp-action="Create">Добавить</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Название
+            </th>
+            <th>
+                Дата
+            </th>
+            <th>
+                Кому
+            </th>
+            <th>
+                Количество детей
+            </th>
+            <th>
+                Добавил
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @item.Name
+            </td>
+            <td>
+                @item.date.ToString("dd.MM.yyyy")
+            </td>
+            <td>
+                @item.ChildHouse
+            </td>
+            <td>
+                @item.ChildCount
+            </td>
+            <td>
+                @item.ApplicationUsers.LastName
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Редактировать</a> 
+                <a asp-action="Index" asp-controller="MenuFoods" asp-route-IdMenu="@item.Id">Детали</a> 
+                <a asp-action="Delete" asp-route-id="@item.Id">Удалить</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+

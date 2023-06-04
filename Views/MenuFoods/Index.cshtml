@@ -1,0 +1,71 @@
+﻿@model IEnumerable<Diplom.Models.MenuFood>
+
+<p>
+    <a href="@Url.Action("Create", "MenuFoods", new { IdMenu = ViewBag.IdMenu })" >Добавить продукт</a>
+</p>
+<p>
+    <a asp-action="Index" asp-controller="Menus">Вернуться к списку меню</a>
+</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Название продукта
+            </th>
+            <th>
+                Количество за единицу
+            </th>
+            <th>
+                Выдача
+            </th>
+            <th>
+                Код
+            </th>
+            <th>
+                Блюдо
+            </th>
+            <th>
+                Время приема пищи
+            </th>
+            <th>
+                Единица измерения
+            </th>
+            
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CountPerUnit)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Supply)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Code)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Meal.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MealTime.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Unit.Name)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Редактирование</a> 
+                
+                <a asp-action="Delete" asp-route-id="@item.Id">Удалить</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+

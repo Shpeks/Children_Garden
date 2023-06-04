@@ -1,0 +1,40 @@
+﻿@model IEnumerable<Diplom.Models.VaultNote>
+<p>
+    <a href="@Url.Action("Create", "VaultNotes", new { idVault = ViewBag.IdVault })"> 
+        Добавить запись
+    </a>
+</p>
+
+<p>
+    <a asp-controller="Vaults" asp-action="Index">Вернуться к списку сводов</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            
+            <th>
+                Дата
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Date)
+            </td>
+
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Редактирование</a>
+                <a href="@Url.Action("Index", "Arrivals", new { idVaultNote = item.Id})">Приход</a>
+                <a href="@Url.Action("Index", "ProductConsumptions", new { idVaultNote = item.Id })">Расход</a>
+                <a href="@Url.Action("Index", "PreviousBalances", new { idVaultNote = item.Id })">Остаток</a>
+                <a asp-action="Delete" asp-route-id="@item.Id">Удалить</a>
+            </td>
+        </tr>
+        }
+    </tbody>
+    
+</table>

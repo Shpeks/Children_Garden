@@ -1,0 +1,51 @@
+﻿@model IEnumerable<Diplom.Models.Vault>
+
+
+<p>
+    <a asp-action="Create" class="btn border-dark btn-dark">Создать новый</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Название
+            </th>
+            <th>
+                Дата начала
+            </th>
+            <th>
+                Дата конца
+            </th>
+            <th>
+                Автор
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.VaultName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DateStart)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DateEnd)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ApplicationUsers.FirstName)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Редактирование</a>
+                    <a asp-action="Index" asp-controller="VaultNotes" asp-route-IdVault="@item.Id">Детали</a>
+                    <a asp-action="Delete" asp-route-id="@item.Id">Удалить</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<a href="C:\Users\Keks\Desktop\Диплом крутой\Diplom\Views\Vaults\Index.cshtml">C:\Users\Keks\Desktop\Диплом крутой\Diplom\Views\Vaults\Index.cshtml</a>
+
