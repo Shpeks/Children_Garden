@@ -50,7 +50,7 @@
 
                                     <td>@item.Unit.Name</td>
                                     <td>
-                                        <a asp-action="Edit" asp-route-id="@item.Id">Редактирование</a>
+                                        <a href="@Url.Action("Edit", "MenuFoods", new { id = item.Id, IdMenu = item.MenuId })">Редактировать</a>
                                         <a asp-action="Delete" asp-route-id="@item.Id">Удалить</a>
                                     </td>
                                 </tr>
@@ -71,10 +71,46 @@
         </div>
         <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
             <div class="card-body">
-                @foreach (var item in Model.Where(x => x.MealTimeId == 2))
-                {
-                    <p>@item.Name</p>
-                }
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Название</th>
+                            <th>Количество за единицу</th>
+                            <th>Поставка</th>
+                            <th>Код</th>
+
+                            <th>Единица измерения</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var group in Model.Where(x => x.MealTimeId == 2).GroupBy(x => x.MealId))
+                        {
+                            var meal = group.First().Meal;
+                            var unit = group.First().Unit;
+
+                            <tr>
+                                <td colspan="7">@meal.Name</td>
+                            </tr>
+
+                            @foreach (var item in group.OrderBy(x => x.Name))
+                            {
+                                <tr>
+                                    <td>@item.Name</td>
+                                    <td>@item.CountPerUnit</td>
+                                    <td>@item.Supply</td>
+                                    <td>@item.Code</td>
+
+                                    <td>@item.Unit.Name</td>
+                                    <td>
+                                        <a href="@Url.Action("Edit", "MenuFoods", new { id = item.Id, IdMenu = item.MenuId })">Редактировать</a>
+                                        <a asp-action="Delete" asp-route-id="@item.Id">Удалить</a>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
@@ -88,10 +124,46 @@
         </div>
         <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
             <div class="card-body">
-                @foreach (var item in Model.Where(x => x.MealTimeId == 3))
-                {
-                    <p>@item.Name</p>
-                }
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Название</th>
+                            <th>Количество за единицу</th>
+                            <th>Поставка</th>
+                            <th>Код</th>
+
+                            <th>Единица измерения</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var group in Model.Where(x => x.MealTimeId == 3).GroupBy(x => x.MealId))
+                        {
+                            var meal = group.First().Meal;
+                            var unit = group.First().Unit;
+
+                            <tr>
+                                <td colspan="7">@meal.Name</td>
+                            </tr>
+
+                            @foreach (var item in group.OrderBy(x => x.Name))
+                            {
+                                <tr>
+                                    <td>@item.Name</td>
+                                    <td>@item.CountPerUnit</td>
+                                    <td>@item.Supply</td>
+                                    <td>@item.Code</td>
+
+                                    <td>@item.Unit.Name</td>
+                                    <td>
+                                        <a href="@Url.Action("Edit", "MenuFoods", new { id = item.Id, IdMenu = item.MenuId })">Редактировать</a>
+                                        <a asp-action="Delete" asp-route-id="@item.Id">Удалить</a>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
@@ -105,10 +177,46 @@
         </div>
         <div id="collapseFour" class="collapse" aria-labelledby="headingFour" data-parent="#accordion">
             <div class="card-body">
-                @foreach (var item in Model.Where(x => x.MealTimeId == 4))
-                {
-                    <p>@item.Name</p>
-                }
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Название</th>
+                            <th>Количество за единицу</th>
+                            <th>Поставка</th>
+                            <th>Код</th>
+
+                            <th>Единица измерения</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var group in Model.Where(x => x.MealTimeId == 4).GroupBy(x => x.MealId))
+                        {
+                            var meal = group.First().Meal;
+                            var unit = group.First().Unit;
+
+                            <tr>
+                                <td colspan="7">@meal.Name</td>
+                            </tr>
+
+                            @foreach (var item in group.OrderBy(x => x.Name))
+                            {
+                                <tr>
+                                    <td>@item.Name</td>
+                                    <td>@item.CountPerUnit</td>
+                                    <td>@item.Supply</td>
+                                    <td>@item.Code</td>
+
+                                    <td>@item.Unit.Name</td>
+                                    <td>
+                                        <a href="@Url.Action("Edit", "MenuFoods", new { id = item.Id, IdMenu = item.MenuId })">Редактировать</a>
+                                        <a asp-action="Delete" asp-route-id="@item.Id">Удалить</a>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
@@ -122,10 +230,46 @@
         </div>
         <div id="collapseFive" class="collapse" aria-labelledby="headingFive" data-parent="#accordion">
             <div class="card-body">
-                @foreach (var item in Model.Where(x => x.MealTimeId == 5))
-                {
-                    <p>@item.Name</p>
-                }
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Название</th>
+                            <th>Количество за единицу</th>
+                            <th>Поставка</th>
+                            <th>Код</th>
+
+                            <th>Единица измерения</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var group in Model.Where(x => x.MealTimeId == 5).GroupBy(x => x.MealId))
+                        {
+                            var meal = group.First().Meal;
+                            var unit = group.First().Unit;
+
+                            <tr>
+                                <td colspan="7">@meal.Name</td>
+                            </tr>
+
+                            @foreach (var item in group.OrderBy(x => x.Name))
+                            {
+                                <tr>
+                                    <td>@item.Name</td>
+                                    <td>@item.CountPerUnit</td>
+                                    <td>@item.Supply</td>
+                                    <td>@item.Code</td>
+
+                                    <td>@item.Unit.Name</td>
+                                    <td>
+                                        <a href="@Url.Action("Edit", "MenuFoods", new { id = item.Id, IdMenu = item.MenuId })">Редактировать</a>
+                                        <a asp-action="Delete" asp-route-id="@item.Id">Удалить</a>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>

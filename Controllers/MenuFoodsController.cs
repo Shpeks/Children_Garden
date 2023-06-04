@@ -112,11 +112,11 @@ namespace Diplom.Controllers
             return View(menuFood);
         }
 
-        
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, MenuFood menuFood)
+        public async Task<IActionResult> Edit(int id, MenuFood menuFood, int IdMenu)
         {
+            
             if (id != menuFood.Id)
             {
                 return NotFound();
