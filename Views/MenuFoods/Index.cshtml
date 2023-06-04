@@ -6,66 +6,129 @@
 <p>
     <a asp-action="Index" asp-controller="Menus">Вернуться к списку меню</a>
 </p>
+<div id="accordion">
+    <div class="card">
+        <div class="card-header" id="headingOne">
+            <h5 class="mb-0">
+                <button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                    Завтрак
+                </button>
+            </h5>
+        </div>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                Название продукта
-            </th>
-            <th>
-                Количество за единицу
-            </th>
-            <th>
-                Выдача
-            </th>
-            <th>
-                Код
-            </th>
-            <th>
-                Блюдо
-            </th>
-            <th>
-                Время приема пищи
-            </th>
-            <th>
-                Единица измерения
-            </th>
-            
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CountPerUnit)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Supply)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Code)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Meal.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.MealTime.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Unit.Name)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Редактирование</a> 
-                
-                <a asp-action="Delete" asp-route-id="@item.Id">Удалить</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+        <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
+            <div class="card-body">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Название</th>
+                            <th>Количество за единицу</th>
+                            <th>Поставка</th>
+                            <th>Код</th>
+                            
+                            <th>Единица измерения</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var group in Model.Where(x => x.MealTimeId == 1).GroupBy(x => x.MealId))
+                        {
+                            var meal = group.First().Meal;
+                            var unit = group.First().Unit;
+
+                            <tr>
+                                <td colspan="7">@meal.Name</td>
+                            </tr>
+
+                            @foreach (var item in group.OrderBy(x => x.Name))
+                            {
+                                <tr>
+                                    <td>@item.Name</td>
+                                    <td>@item.CountPerUnit</td>
+                                    <td>@item.Supply</td>
+                                    <td>@item.Code</td>
+                                    
+                                    <td>@item.Unit.Name</td>
+                                    <td>
+                                        <a asp-action="Edit" asp-route-id="@item.Id">Редактирование</a>
+                                        <a asp-action="Delete" asp-route-id="@item.Id">Удалить</a>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-header" id="headingTwo">
+            <h5 class="mb-0">
+                <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                    2-ой Завтрак
+                </button>
+            </h5>
+        </div>
+        <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
+            <div class="card-body">
+                @foreach (var item in Model.Where(x => x.MealTimeId == 2))
+                {
+                    <p>@item.Name</p>
+                }
+            </div>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-header" id="headingThree">
+            <h5 class="mb-0">
+                <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                    Обед
+                </button>
+            </h5>
+        </div>
+        <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
+            <div class="card-body">
+                @foreach (var item in Model.Where(x => x.MealTimeId == 3))
+                {
+                    <p>@item.Name</p>
+                }
+            </div>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-header" id="headingFour">
+            <h5 class="mb-0">
+                <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                    Полдник
+                </button>
+            </h5>
+        </div>
+        <div id="collapseFour" class="collapse" aria-labelledby="headingFour" data-parent="#accordion">
+            <div class="card-body">
+                @foreach (var item in Model.Where(x => x.MealTimeId == 4))
+                {
+                    <p>@item.Name</p>
+                }
+            </div>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-header" id="headingFive">
+            <h5 class="mb-0">
+                <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+                    Ужин
+                </button>
+            </h5>
+        </div>
+        <div id="collapseFive" class="collapse" aria-labelledby="headingFive" data-parent="#accordion">
+            <div class="card-body">
+                @foreach (var item in Model.Where(x => x.MealTimeId == 5))
+                {
+                    <p>@item.Name</p>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
 

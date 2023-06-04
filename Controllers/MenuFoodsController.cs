@@ -26,7 +26,11 @@ namespace Diplom.Controllers
             var applicationDbContext = _context.MenuFoods.Include(m => m.Meal).Include(m => m.MealTime).Include(m => m.Menu).Include(m => m.Unit);
             float totalPerUnit = await applicationDbContext.SumAsync(m => m.CountPerUnit);
             ViewBag.TotalPerUnit = totalPerUnit;
-            float totalSupply = await applicationDbContext.SumAsync(v => v.Supply);
+            
+
+            // Calculate the supply
+            float childCount = await _context.Menus.Where(m => m.Id == IdMenu).Select(m => m.ChildCount).FirstOrDefaultAsync();
+            float totalSupply = await applicationDbContext.SumAsync(m => (childCount * m.CountPerUnit) / 1000);
             ViewBag.TotalSupply = totalSupply;
 
             return View(await applicationDbContext.ToListAsync());
@@ -73,9 +77,12 @@ namespace Diplom.Controllers
         {
 
             menuFood.MenuId = IdMenu;
+            // Calculate the supply
+            float childCount = await _context.Menus.Where(m => m.Id == IdMenu).Select(m => m.ChildCount).FirstOrDefaultAsync();
+            menuFood.Supply = (childCount * menuFood.CountPerUnit) / 1000;
+
             if (ModelState.IsValid)
             {
-
                 _context.Add(menuFood);
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Index", new { IdMenu = IdMenu });
@@ -117,6 +124,8 @@ namespace Diplom.Controllers
 
             if (ModelState.IsValid)
             {
+                float childCount = await _context.Menus.Where(m => m.Id == menuFood.MenuId).Select(m => m.ChildCount).FirstOrDefaultAsync();
+                menuFood.Supply = (childCount * menuFood.CountPerUnit) / 1000;
                 try
                 {
                     _context.Update(menuFood);

@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Diplom.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230518125722_1")]
+    [Migration("20230604190451_1")]
     partial class _1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

@@ -99,6 +99,8 @@ namespace Diplom.Controllers
             {
                 return NotFound();
             }
+
+
             var roles = await _userManager.GetUsersInRoleAsync("Medic");
             var users = roles
                 .Select(s => new SelectOptions
@@ -125,6 +127,8 @@ namespace Diplom.Controllers
 
             if (ModelState.IsValid)
             {
+                // Calculate the supply for each associated MenuFood
+                var menuFoods = await _context.MenuFoods.Where(mf => mf.MenuId == menu.Id).ToListAsync();
                 try
                 {
                     _context.Update(menu);
