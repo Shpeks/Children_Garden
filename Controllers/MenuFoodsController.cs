@@ -24,8 +24,8 @@ namespace Diplom.Controllers
         {
             ViewBag.IdMenu = IdMenu;
             var applicationDbContext = _context.MenuFoods.Include(m => m.Meal).Include(m => m.MealTime).Include(m => m.Menu).Include(m => m.Unit);
-            float totalPerUnit = await applicationDbContext.SumAsync(m => m.CountPerUnit);
-            ViewBag.TotalPerUnit = totalPerUnit;
+            
+            ViewBag.TotalPerUnit = await applicationDbContext.SumAsync(m => m.CountPerUnit);
             
 
             // Calculate the supply
