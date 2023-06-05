@@ -19,7 +19,7 @@
             </h5>
         </div>
 
-        <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
+        <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
             <div class="card-body">
                 
                 <table class="table">
@@ -296,11 +296,17 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>Общий подсчет</td>
-                            <td>@ViewBag.TotalPerUnit</td>
-                            <td>@ViewBag.TotalSupply</td>
-                        </tr>
+                        @foreach (var group in Model.GroupBy(x => x.Name))
+                        {
+                            var totalPerUnit = group.Sum(x => x.CountPerUnit);
+                            var totalSupply = group.Sum(x => x.Supply);
+
+                            <tr>
+                                <td>@group.Key</td>
+                                <td>@totalPerUnit</td>
+                                <td>@totalSupply</td>
+                            </tr>
+                        }
                     </tbody>
                 </table>
             </div>
