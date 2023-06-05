@@ -4,6 +4,9 @@
     <a href="@Url.Action("Create", "MenuFoods", new { IdMenu = ViewBag.IdMenu })" >Добавить продукт</a>
 </p>
 <p>
+    <a href="@Url.Action("Create", "Meals", new { IdMenu = ViewBag.IdMenu })">Добавить блюдо</a>
+</p>
+<p>
     <a asp-action="Index" asp-controller="Menus">Вернуться к списку меню</a>
 </p>
 <div id="accordion">
@@ -18,6 +21,7 @@
 
         <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
             <div class="card-body">
+                
                 <table class="table">
                     <thead>
                         <tr>
@@ -51,7 +55,7 @@
                                     <td>@item.Unit.Name</td>
                                     <td>
                                         <a href="@Url.Action("Edit", "MenuFoods", new { id = item.Id, IdMenu = item.MenuId })">Редактировать</a>
-                                        <a asp-action="Delete" asp-route-id="@item.Id">Удалить</a>
+                                        <a href="@Url.Action("Delete", "MenuFoods", new { id = item.Id, IdMenu = item.MenuId })">Удалить</a>
                                     </td>
                                 </tr>
                             }

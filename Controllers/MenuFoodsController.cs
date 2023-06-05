@@ -67,7 +67,7 @@ namespace Diplom.Controllers
             ViewData["MealTimeId"] = new SelectList(_context.MealTimes, "Id", "Name");
             ViewData["MenuId"] = new SelectList(_context.Menus, "Id", "Name");
             ViewData["UnitId"] = new SelectList(_context.Units, "Id", "Name");
-            return View(new MenuFood { MenuId = IdMenu }); // Установите MenuId равным IdMenu
+            return View(new MenuFood { MenuId = IdMenu }); 
         }
 
         
@@ -152,8 +152,9 @@ namespace Diplom.Controllers
         }
 
         // GET: MenuFoods/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public async Task<IActionResult> Delete(int? id, int IdMenu)
         {
+            ViewBag.IdMenu = IdMenu;
             if (id == null)
             {
                 return NotFound();
@@ -178,6 +179,7 @@ namespace Diplom.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id, int IdMenu)
         {
+            ViewBag.IdMenu = IdMenu;
             var menuFood = await _context.MenuFoods.FindAsync(id);
             _context.MenuFoods.Remove(menuFood);
             await _context.SaveChangesAsync();

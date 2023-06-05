@@ -44,24 +44,25 @@ namespace Diplom.Controllers
         }
 
         // GET: Meals/Create
-        public IActionResult Create()
+        public IActionResult Create(int? IdMenu)
         {
+            ViewBag.IdMenu = IdMenu;
             return View();
         }
 
-        // POST: Meals/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name")] Meal meal)
+        public async Task<IActionResult> Create(Meal meal, MenuFood menuFood, int IdMenu)
         {
+            
             if (ModelState.IsValid)
             {
                 _context.Add(meal);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Index", "MenuFoods", new { IdMenu = IdMenu });
             }
+            ViewBag.IdMenu = IdMenu;
             return View(meal);
         }
 
