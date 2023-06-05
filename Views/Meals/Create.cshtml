@@ -1,29 +1,51 @@
-﻿@model Diplom.Models.Meal
+﻿@model IEnumerable<Diplom.Models.Meal>
 
-
-
-<h4>Meal</h4>
+<h4>Блюдо</h4>
+<p>
+    <a asp-controller="MenuFoods" asp-action="Index" asp-route-IdMenu="@ViewBag.IdMenu">Вернуться к меню еды</a>
+</p>
 <hr />
+
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Create" asp-route-IdMenu="@ViewBag.IdMenu">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
+                <label asp-for="@Model.FirstOrDefault().Name" class="control-label">Название</label>
+                <input asp-for="@Model.FirstOrDefault().Name" value="" class="form-control" />
+                <span asp-validation-for="@Model.FirstOrDefault().Name" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="Добавить" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index" asp-controller="MenuFoods" asp-route-IdMenu="@ViewBag.IdMenu">Back to List</a>
-</div>
+<hr />
 
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}
+<h4>Список блюд</h4>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Название</th>
+            <th></th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var meal in Model)
+        {
+            <tr>
+                <td>@meal.Name</td>
+                <td>
+                    <a href="@Url.Action("Edit", "Meals", new { id = meal.Id, IdMenu = ViewBag.IdMenu })">Редактировать</a>
+                </td>
+                <td>
+                    <a href="@Url.Action("Delete", "Meals", new { id = meal.Id, IdMenu = ViewBag.IdMenu })">Удалить</a>
+                </td>
+            </tr>
+
+        }
+    </tbody>
+</table>

@@ -44,10 +44,11 @@ namespace Diplom.Controllers
         }
 
         // GET: Meals/Create
-        public IActionResult Create(int? IdMenu)
+        public async Task<IActionResult> Create(int? IdMenu)
         {
             ViewBag.IdMenu = IdMenu;
-            return View();
+            var meals = await _context.Meals.ToListAsync();
+            return View(meals);
         }
 
         
@@ -67,8 +68,9 @@ namespace Diplom.Controllers
         }
 
         // GET: Meals/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> Edit(int? id, int? IdMenu)
         {
+            ViewBag.IdMenu = IdMenu;
             if (id == null)
             {
                 return NotFound();
@@ -82,13 +84,12 @@ namespace Diplom.Controllers
             return View(meal);
         }
 
-        // POST: Meals/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name")] Meal meal)
+        public async Task<IActionResult> Edit(int id, Meal meal, int IdMenu)
         {
+            ViewBag.IdMenu = IdMenu;
             if (id != meal.Id)
             {
                 return NotFound();
@@ -112,14 +113,15 @@ namespace Diplom.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Create", "Meals", new { IdMenu = ViewBag.IdMenu });
             }
             return View(meal);
         }
 
         // GET: Meals/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public async Task<IActionResult> Delete(int? id, int IdMenu)
         {
+            ViewBag.IdMenu = IdMenu;
             if (id == null)
             {
                 return NotFound();
@@ -138,12 +140,13 @@ namespace Diplom.Controllers
         // POST: Meals/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(int id, int IdMenu)
         {
+            ViewBag.IdMenu = IdMenu;
             var meal = await _context.Meals.FindAsync(id);
             _context.Meals.Remove(meal);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction("Create", "Meals", new { IdMenu = ViewBag.IdMenu });
         }
 
         private bool MealExists(int id)

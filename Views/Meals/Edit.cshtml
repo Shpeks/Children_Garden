@@ -1,19 +1,6 @@
 ﻿@model Diplom.Models.Meal
 
-@{
-    Layout = null;
-}
-
-<!DOCTYPE html>
-
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>Edit</title>
-</head>
-<body>
-
-<h4>Meal</h4>
+<h4>Редактирование</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -25,6 +12,7 @@
                 <input asp-for="Name" class="form-control" />
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
+            <input type="hidden" name="IdMenu" value="@ViewBag.IdMenu" />
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>
@@ -33,11 +21,10 @@
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Create" asp-route-IdMenu="@ViewBag.IdMenu">Вернуться</a>
 </div>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
-</body>
-</html>
+
