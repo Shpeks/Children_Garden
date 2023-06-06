@@ -127,25 +127,24 @@ namespace Diplom.Controllers
 
             if (ModelState.IsValid)
             {
-                // Calculate the supply for each associated MenuFood
-                var menuFoods = await _context.MenuFoods.Where(mf => mf.MenuId == menu.Id).ToListAsync();
-                try
+                
+                
+                if (ModelState.IsValid)
                 {
                     _context.Update(menu);
+
+                    
+                    var menuFoods = await _context.MenuFoods.Where(mf => mf.MenuId == menu.Id).ToListAsync();
+                    foreach (var menuFood in menuFoods)
+                    {
+                        menuFood.Supply = menuFood.CountPerUnit * menu.ChildCount/1000;
+                        _context.Update(menuFood);
+                    }
+
                     await _context.SaveChangesAsync();
+
+                    return RedirectToAction(nameof(Index));
                 }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!MenuExists(menu.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
             }
             ViewData["IdUser"] = new SelectList(_context.ApplicationUsers, "Id", "Id", menu.IdUser);
             return View(menu);

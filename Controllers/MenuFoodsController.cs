@@ -129,6 +129,8 @@ namespace Diplom.Controllers
                 try
                 {
                     _context.Update(menuFood);
+
+
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -190,5 +192,6 @@ namespace Diplom.Controllers
         {
             return _context.MenuFoods.Any(e => e.Id == id);
         }
+
     }
 }
