@@ -49,7 +49,7 @@
                                 <tr>
                                     <td>@item.Name</td>
                                     <td>@item.CountPerUnit</td>
-                                    <td>@item.Supply</td>
+                                    <td>@Math.Round(item.Supply, 2)</td>
                                     <td>@item.Code</td>
 
                                     <td>@item.Unit.Name</td>
@@ -102,7 +102,7 @@
                                 <tr>
                                     <td>@item.Name</td>
                                     <td>@item.CountPerUnit</td>
-                                    <td>@item.Supply</td>
+                                    <td>@Math.Round(item.Supply, 2)</td>
                                     <td>@item.Code</td>
 
                                     <td>@item.Unit.Name</td>
@@ -155,7 +155,7 @@
                                 <tr>
                                     <td>@item.Name</td>
                                     <td>@item.CountPerUnit</td>
-                                    <td>@item.Supply</td>
+                                    <td>@Math.Round(item.Supply, 2)</td>
                                     <td>@item.Code</td>
 
                                     <td>@item.Unit.Name</td>
@@ -208,7 +208,7 @@
                                 <tr>
                                     <td>@item.Name</td>
                                     <td>@item.CountPerUnit</td>
-                                    <td>@item.Supply</td>
+                                    <td>@Math.Round(item.Supply, 2)</td>
                                     <td>@item.Code</td>
 
                                     <td>@item.Unit.Name</td>
@@ -261,7 +261,7 @@
                                 <tr>
                                     <td>@item.Name</td>
                                     <td>@item.CountPerUnit</td>
-                                    <td>@item.Supply</td>
+                                    <td>@Math.Round(item.Supply, 2)</td>
                                     <td>@item.Code</td>
 
                                     <td>@item.Unit.Name</td>
@@ -304,7 +304,7 @@
                             <tr>
                                 <td>@group.Key</td>
                                 <td>@totalPerUnit</td>
-                                <td>@totalSupply</td>
+                                <td>@Math.Round(totalSupply, 2)</td>
                             </tr>
                         }
                     </tbody>

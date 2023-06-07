@@ -23,8 +23,13 @@ namespace Diplom.Controllers
         public async Task<IActionResult> Index(int IdMenu)
         {
             ViewBag.IdMenu = IdMenu;
-            var applicationDbContext = _context.MenuFoods.Include(m => m.Meal).Include(m => m.MealTime).Include(m => m.Menu).Include(m => m.Unit);
-            
+            var applicationDbContext = _context.MenuFoods
+                   .Where(mf => mf.MenuId == IdMenu)
+                   .Include(m => m.Meal)
+                   .Include(m => m.MealTime)
+                   .Include(m => m.Menu)
+                   .Include(m => m.Unit);
+
             ViewBag.TotalPerUnit = await applicationDbContext.SumAsync(m => m.CountPerUnit);
             
 
@@ -78,16 +83,51 @@ namespace Diplom.Controllers
 
             menuFood.MenuId = IdMenu;
             // Calculate the supply
-            float childCount = await _context.Menus.Where(m => m.Id == IdMenu).Select(m => m.ChildCount).FirstOrDefaultAsync();
-            menuFood.Supply = (childCount * menuFood.CountPerUnit) / 1000;
-
-            if (ModelState.IsValid)
+            var maxCounts = new Dictionary<int, int>
             {
-                _context.Add(menuFood);
-                await _context.SaveChangesAsync();
-                return RedirectToAction("Index", new { IdMenu = IdMenu });
-            }
+                { 1, 3 },
+                { 2, 1 },
+                { 3, 6 },
+                { 4, 2 },
+                { 5, 3 }
+            };
 
+            var mealTimeId = menuFood.MealTimeId;
+            if (maxCounts.TryGetValue(mealTimeId, out int maxMenuFoodCount))
+            {
+                var count = await _context.MenuFoods
+                    .CountAsync(mf => mf.MealTimeId == mealTimeId && mf.MenuId == IdMenu);
+
+                if (count < maxMenuFoodCount)
+                {
+                    // Calculate the supply
+                    float childCount = await _context.Menus
+                        .Where(m => m.Id == IdMenu)
+                        .Select(m => m.ChildCount)
+                        .FirstOrDefaultAsync();
+                    menuFood.Supply = (childCount * menuFood.CountPerUnit) / 1000;
+
+                    if (ModelState.IsValid)
+                    {
+                        _context.Add(menuFood);
+                        await _context.SaveChangesAsync();
+                        return RedirectToAction("Index", new { IdMenu = IdMenu });
+                    }
+                }
+                else
+                {
+                    var mealTimeName = await _context.MealTimes
+                        .Where(mt => mt.Id == mealTimeId)
+                        .Select(mt => mt.Name)
+                        .FirstOrDefaultAsync();
+                    ModelState.AddModelError(string.Empty, $"Превышено максимальное количество записей '{mealTimeName}'.");
+                }
+            }
+            ViewBag.IdMenu = IdMenu;
+            ViewData["MealId"] = new SelectList(_context.Meals, "Id", "Name");
+            ViewData["MealTimeId"] = new SelectList(_context.MealTimes, "Id", "Name");
+            ViewData["MenuId"] = new SelectList(_context.Menus, "Id", "Name");
+            ViewData["UnitId"] = new SelectList(_context.Units, "Id", "Name");
             return View(menuFood);  
         }
 
