@@ -122,12 +122,7 @@ namespace Diplom.Data
                 .HasForeignKey(p => p.IdFood)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            builder.Entity<ChildHouse>()
-                .HasOne(v => v.VaultNote)
-                .WithMany(v => v.ChildHouses)
-                .HasForeignKey(v => v.IdVaultNote)
-                .OnDelete(DeleteBehavior.Cascade);
-
+            
             builder.Entity<ProductConsumption>()
                 .HasOne(pc => pc.Food)
                 .WithMany(v => v.ProductConsumptions)

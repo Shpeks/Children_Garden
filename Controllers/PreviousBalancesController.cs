@@ -33,61 +33,64 @@ namespace Diplom.Controllers
             int idVault = vaultNote.Vault.Id;
             ViewBag.IdVault = idVault;
 
-
             // Проверка наличия записи в таблице Product для данной VaultNote
             var existingBalances = await _context.PreviousBalances
                 .Where(a => a.IdVaultNote == vaultNote.Id)
                 .ToListAsync();
-            if (existingBalances.Count == 0)
-            {
-                // Создание записей в таблице Balances
-                var foods = await _context.Foods.ToListAsync();
-                foreach (var food in foods)
-                {
-                    var balances = new PreviousBalance
-                    {
-                        IdFood = food.Id,
-                        IdVaultNote = vaultNote.Id,
-                        StartBalance = 0,
-                        EndBalance = 0
-                    };
-
-                    _context.Add(balances);
-                }
-
-                await _context.SaveChangesAsync();
-            }
-
+            
             // Получение списков Arrival и ProductConsumption для данной VaultNote
             var arrivals = await _context.Arrivals
                 .Where(a => a.IdVaultNote == vaultNote.Id)
                 .ToListAsync();
-
             var consumptions = await _context.ProductConsumptions
                 .Where(c => c.IdVaultNote == vaultNote.Id)
+                .ToListAsync();
+
+            var prevVaultNote = await _context.VaultNotes
+                .Where(v => v.IdVault == vaultNote.IdVault && v.Date < vaultNote.Date)
+                .OrderByDescending(v => v.Date)
+                .FirstOrDefaultAsync();
+            var prevBalances = await _context.PreviousBalances
+                .Where(v => prevVaultNote != null && v.IdVaultNote == prevVaultNote.Id)
                 .ToListAsync();
 
             // Расчет конечного остатка на основе начального остатка, приходов и расходов
             foreach (var balance in existingBalances)
             {
-                double startBalance = balance.StartBalance ?? 0;
+                var prevBalance = prevBalances?.FirstOrDefault(v => v.IdFood == balance.IdFood);
+                double startBalance = balance.StartBalance.Value + (prevBalance?.EndBalance.Value ?? 0.0);
                 double totalArrival = arrivals.Where(a => a.IdFood == balance.IdFood)
                                               .Sum(a => a.FoodCount ?? 0);
                 double totalConsumption = consumptions.Where(c => c.IdFood == balance.IdFood)
                                                       .Sum(c => (c.FoodCountChild ?? 0) + (c.FoodCountKid ?? 0));
-                double endBalance = startBalance + totalArrival - totalConsumption;
+                double endBalance = (startBalance + totalArrival) - totalConsumption;
 
                 balance.EndBalance = endBalance;
                 _context.Update(balance);
             }
-
             await _context.SaveChangesAsync();
 
+            var nextVaultNote = await _context.VaultNotes
+                .Where(v => v.IdVault == vaultNote.IdVault && v.Date > vaultNote.Date)
+                .OrderBy(v => v.Date)
+                .FirstOrDefaultAsync();
 
-            var balancess = await _context.PreviousBalances
+            var balancess = _context.PreviousBalances
             .Include(a => a.Food)
             .Where(a => a.IdVaultNote == vaultNote.Id)
-            .ToListAsync();
+            .ToList()
+            .Select(v => new PreviousBalance
+            {
+                Id = v.Id,
+                EndBalance = v.EndBalance,
+                IdVaultNote = v.IdVaultNote,
+                IdFood = v.IdFood,
+                Food = v.Food,
+                VaultNote = v.VaultNote,    
+                StartBalance = v.StartBalance.Value + (prevBalances == null ? 0: prevBalances.FirstOrDefault(a => a.IdFood == v.IdFood) != null? prevBalances.FirstOrDefault(a => a.IdFood == v.IdFood).EndBalance.Value : 0)
+            })
+            .OrderBy(v => v.Food.NameFood)
+            .ToList();
 
             return View(balancess);
         }

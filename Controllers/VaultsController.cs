@@ -80,6 +80,20 @@ namespace Diplom.Controllers
                             IdVault = vault.Id
                         };
                         _context.Add(vaultNote);
+
+                        var foods = await _context.Foods.ToListAsync();
+                        foreach (var food in foods)
+                        {
+                            var balances = new PreviousBalance
+                            {
+                                IdFood = food.Id,
+                                VaultNote = vaultNote,
+                                StartBalance = 0,
+                                EndBalance = 0
+                            };
+
+                            _context.Add(balances);
+                        }
                     }
 
                     currentDate = currentDate.AddDays(1);

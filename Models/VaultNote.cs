@@ -17,6 +17,6 @@ namespace Diplom.Models
         public ICollection<ProductConsumption> ProductConsumptions { get; set; }
         public ICollection<PreviousBalance> PreviousBalance { get; set; }
         public ICollection<Arrival> Arrivals { get; set; }
-        public ICollection<ChildHouse> ChildHouses { get; set; }
+        
     }
 }
