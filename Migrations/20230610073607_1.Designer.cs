@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Diplom.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230604190451_1")]
+    [Migration("20230610073607_1")]
     partial class _1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -66,9 +66,12 @@ namespace Diplom.Migrations
                     b.Property<string>("NameHouse")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("VaultNoteId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("IdVaultNote");
+                    b.HasIndex("VaultNoteId");
 
                     b.ToTable("ChildHouses");
                 });
@@ -786,10 +789,16 @@ namespace Diplom.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<int>("ChildCount")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
                     b.Property<int>("IdVault")
+                        .HasColumnType("int");
+
+                    b.Property<int>("KidCount")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -1036,10 +1045,8 @@ namespace Diplom.Migrations
             modelBuilder.Entity("Diplom.Models.ChildHouse", b =>
                 {
                     b.HasOne("Diplom.Models.VaultNote", "VaultNote")
-                        .WithMany("ChildHouses")
-                        .HasForeignKey("IdVaultNote")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .WithMany()
+                        .HasForeignKey("VaultNoteId");
 
                     b.Navigation("VaultNote");
                 });
@@ -1245,8 +1252,6 @@ namespace Diplom.Migrations
             modelBuilder.Entity("Diplom.Models.VaultNote", b =>
                 {
                     b.Navigation("Arrivals");
-
-                    b.Navigation("ChildHouses");
 
                     b.Navigation("PreviousBalance");
 

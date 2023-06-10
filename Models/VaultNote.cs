@@ -12,6 +12,8 @@ namespace Diplom.Models
         public int Id { get; set; }     
         [DisplayFormat(DataFormatString = "{0:dd.MM.yyyy}")]
         public DateTime Date { get; set; }
+        public int ChildCount { get; set; }
+        public int KidCount { get; set; }
         public int IdVault { get; set; }
         public Vault Vault { get; set; }
         public ICollection<ProductConsumption> ProductConsumptions { get; set; }

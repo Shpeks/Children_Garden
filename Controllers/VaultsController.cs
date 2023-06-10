@@ -57,7 +57,7 @@ namespace Diplom.Controllers
                 var minDateRange = 10; // Минимальный отрезок времени (в днях)
                 var dateRange = (vault.DateEnd.Date - vault.DateStart.Date).TotalDays;
 
-                if (dateRange < minDateRange)
+                if (dateRange <= minDateRange)
                 {
                     ModelState.AddModelError(string.Empty, $"Выбранный отрезок времени должен быть не менее {minDateRange} дней или ошибка в выбранных датах.");
                     await SetCreateViewData();

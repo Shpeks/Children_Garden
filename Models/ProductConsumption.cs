@@ -10,6 +10,7 @@ namespace Diplom.Models
         
         [DisplayFormat(DataFormatString = "{0:dd.MM.yyyy}")]
         public DateTime Date { get; set; }
+        
         public float? FoodCountChild { get; set; }
         public float? FoodCountKid { get; set; }
         public int IdFood { get; set; }

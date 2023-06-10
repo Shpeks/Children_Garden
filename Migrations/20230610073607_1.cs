@@ -353,6 +353,8 @@ namespace Diplom.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Date = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ChildCount = table.Column<int>(type: "int", nullable: false),
+                    KidCount = table.Column<int>(type: "int", nullable: false),
                     IdVault = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -407,18 +409,19 @@ namespace Diplom.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     NameHouse = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ChildCount = table.Column<int>(type: "int", nullable: false),
-                    IdVaultNote = table.Column<int>(type: "int", nullable: false)
+                    IdVaultNote = table.Column<int>(type: "int", nullable: false),
+                    VaultNoteId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ChildHouses", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ChildHouses_VaultNotes_IdVaultNote",
-                        column: x => x.IdVaultNote,
+                        name: "FK_ChildHouses_VaultNotes_VaultNoteId",
+                        column: x => x.VaultNoteId,
                         principalSchema: "Identity",
                         principalTable: "VaultNotes",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -655,10 +658,10 @@ namespace Diplom.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ChildHouses_IdVaultNote",
+                name: "IX_ChildHouses_VaultNoteId",
                 schema: "Identity",
                 table: "ChildHouses",
-                column: "IdVaultNote");
+                column: "VaultNoteId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_MenuFoods_MealId",

@@ -1,6 +1,6 @@
 ﻿@model IEnumerable<Diplom.Models.VaultNote>
 <p>
-    <a href="@Url.Action("Create", "VaultNotes", new { idVault = ViewBag.IdVault })"> 
+    <a href="@Url.Action("Create", "VaultNotes", new { idVault = ViewBag.IdVault })">
         Добавить запись
     </a>
 </p>
@@ -11,9 +11,15 @@
 <table class="table">
     <thead>
         <tr>
-            
+
             <th>
                 Дата
+            </th>
+            <th>
+                Сад
+            </th>
+            <th>
+                Ясли
             </th>
             <th></th>
         </tr>
@@ -25,9 +31,12 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Date)
             </td>
+            <td>@item.ChildCount</td>
+            <td>@item.KidCount</td>
 
             <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Редактирование</a>
+                <a asp-action="Edit" asp-route-id="@item.Id">Дети</a>
+
                 <a href="@Url.Action("Index", "Arrivals", new { idVaultNote = item.Id})">Приход</a>
                 <a href="@Url.Action("Index", "ProductConsumptions", new { idVaultNote = item.Id })">Расход</a>
                 <a href="@Url.Action("Index", "PreviousBalances", new { idVaultNote = item.Id })">Остаток</a>
@@ -36,5 +45,75 @@
         </tr>
         }
     </tbody>
-    
+
 </table>
+<div id="accordion">
+
+<div class="card">
+    <div class="card-header" id="headingOne">
+        <h5 class="mb-0">
+            <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                Общий подсчет
+            </button>
+        </h5>
+    </div>
+    <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
+        <div class="card-body">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>
+                            Сад
+                        </th>
+                        <th>
+                            Ясли
+                        </th>
+                    </tr>
+
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            @Model.Sum(vaultNote => vaultNote.ChildCount)
+                        </td>
+                        <td>
+                            @Model.Sum(vaultNote => vaultNote.KidCount)
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="card-body">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Продукт</th>
+                        <th>Предыдущий остаток</th>
+                        <th>Приход</th>
+                        
+                        <th>Расход на ясли</th>
+                        <th>Расход на сад</th>
+                        <th>Сумма расхода</th>
+                        <th>Остаток</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var food in Model.SelectMany(vaultNote => vaultNote.PreviousBalance.Select(pb => pb.Food)).Distinct())
+                    {
+                    <tr>
+                        <td>@food.NameFood</td>
+                        <td>@Model.Sum(vaultNote => vaultNote.PreviousBalance.Where(pb => pb.Food == food).Sum(pb => pb.StartBalance))</td>
+                        <td>@Model.Sum(vaultNote => vaultNote.Arrivals.Where(a => a.Food == food).Sum(a => a.FoodCount))</td>
+                        
+                        <td>@Model.Sum(vaultNote => vaultNote.ProductConsumptions.Where(pc => pc.Food == food).Sum(pc => pc.FoodCountKid))</td>
+                        <td>@Model.Sum(vaultNote => vaultNote.ProductConsumptions.Where(pc => pc.Food == food).Sum(pc => pc.FoodCountChild))</td>
+                        <td>@Model.Sum(vaultNote => vaultNote.ProductConsumptions.Where(pc => pc.Food == food).Sum(pc => pc.FoodCountKid + pc.FoodCountChild))</td>
+                        <td>@Model.Sum(vaultNote => vaultNote.PreviousBalance.Where(pb => pb.Food == food).Sum(pb => pb.EndBalance))</td>
+                    </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</div>
