@@ -62,6 +62,7 @@ namespace Diplom.Controllers
             var product = await _context.ProductConsumptions
             .Include(a => a.Food)
             .Where(a => a.IdVaultNote == vaultNote.Id)
+            .OrderBy(v => v.Food.NameFood)
             .ToListAsync();
 
             return View(product);

@@ -143,7 +143,7 @@ namespace Diplom.Data
 
             builder.Entity<PreviousBalance>()
                 .HasOne(v => v.VaultNote)
-                .WithMany(v => v.PreviousBalance)
+                .WithMany(v => v.PreviousBalances)
                 .HasForeignKey(v => v.IdVaultNote)
                 .OnDelete(DeleteBehavior.Cascade);
 

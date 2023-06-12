@@ -1103,7 +1103,7 @@ namespace Diplom.Migrations
                         .IsRequired();
 
                     b.HasOne("Diplom.Models.VaultNote", "VaultNote")
-                        .WithMany("PreviousBalance")
+                        .WithMany("PreviousBalances")
                         .HasForeignKey("IdVaultNote")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1251,7 +1251,7 @@ namespace Diplom.Migrations
                 {
                     b.Navigation("Arrivals");
 
-                    b.Navigation("PreviousBalance");
+                    b.Navigation("PreviousBalances");
 
                     b.Navigation("ProductConsumptions");
                 });

@@ -7,6 +7,9 @@ using Microsoft.EntityFrameworkCore;
 using Diplom.Data;
 using Diplom.Models;
 using Microsoft.AspNetCore.Identity;
+using OfficeOpenXml;
+using System.IO;
+using System.Collections.Generic;
 
 namespace Diplom.Controllers
 {
@@ -239,5 +242,275 @@ namespace Diplom.Controllers
         {
             return _context.Vaults.Any(e => e.Id == id);
         }
+        public IActionResult ExportData(Vault vault)
+        {
+            ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+            string templatePath = @"C:\Users\Keks\Desktop\Диплом крутой\Diplom\Svod.xlsx";
+
+            using (var package = new ExcelPackage(new FileInfo(templatePath)))
+            {
+                List<VaultNote> vaultNotes = GetVaultNotes();
+                
+                ExcelWorksheet worksheet = package.Workbook.Worksheets["свод за 10 дней"];
+                
+                // Получение данных из модели Food и заполнение столбца A
+                List<Food> foods = GetFoods();
+                for (int i = 0; i < foods.Count; i++)
+                {
+                    worksheet.Cells[i + 6, 1].Value = foods[i].NameFood;
+                }
+
+                // Получение данных из модели PreviousBalance и заполнение столбца B
+                List<PreviousBalance> previousBalances = GetPreviousBalances();
+                double? sumbalance = 0;
+                int rowB = 6;
+                foreach (var vaultnote in vaultNotes)
+                {
+                    foreach (var food in foods)
+                    {
+                        foreach (var balance in previousBalances)
+                        {
+                            if (vaultnote.IdVault == vault.Id)
+                            {
+                                if (food.Id == balance.IdFood)
+                                {
+                                    sumbalance += balance.StartBalance;
+                                }
+                            }
+                        }
+                        worksheet.Cells[rowB, 2].Value = sumbalance;
+                        sumbalance = 0;
+                        rowB++;
+                    }
+                    {
+                        break;
+                    }
+                }
+
+                // Получение данных из модели Arrival и заполнение столбца C
+                List<Arrival> arrivals = GetArrivals();
+                int rowC = 6;
+                double? sumarrival = 0;
+                foreach (var vaultnote in vaultNotes)
+                {
+                    if (vaultnote.IdVault == vault.Id)
+                    {
+                        foreach (var food in foods)
+                        {
+                            foreach (var arrival in arrivals)
+                            {
+                                if (food.Id == arrival.IdFood)
+                                {
+                                    if (vaultnote.Id == arrival.IdVaultNote)
+                                    {
+                                        sumarrival += arrival.FoodCount;
+                                    }
+                                }
+                            }
+                            worksheet.Cells[rowC, 3].Value = sumarrival;
+                            sumarrival = 0;
+                            rowC++;
+                        }
+                        break;
+                    }
+                }
+
+                // Получение данных VaultNote и заполнение дат в диапазоне D2:W3
+
+                int column = 4;
+                foreach (var vaultNote in vaultNotes)
+                {
+                    if (vaultNote.IdVault == vault.Id)
+                    {
+                        string dateHeaderText = "Расчет продуктов за " + vaultNote.Date.ToString("dd.MM.yyyy");
+
+                        // Объединяем ячейки
+                        worksheet.Cells[2, column, 3, column + 1].Merge = true;
+
+                        // Устанавливаем значение объединенной ячейки
+                        worksheet.Cells[2, column].Value = dateHeaderText;
+
+                        column += 2; // Увеличиваем column на 2, чтобы перейти к следующей паре объединенных ячеек
+                    }
+                }
+
+                // Заполнение KidCount и ChildCount для каждого дня в диапазоне D5:W5
+                int row = 5;
+                int col = 4;
+                foreach (var vaultNote in vaultNotes)
+                {
+                    if (vaultNote.IdVault == vault.Id)
+                    {
+                        worksheet.Cells[row, col].Value = vaultNote.KidCount;
+                        worksheet.Cells[row, col + 1].Value = vaultNote.ChildCount;
+                        col += 2;
+                    }
+                }
+
+                // Получение данных из модели ProductConsumption и заполнение соответствующих столбцов
+                List<ProductConsumption> productConsumptions = GetProductConsumptions();
+                row = 5;
+                column = 4;
+
+                foreach (var food in foods)
+                {
+                    row++;
+                    column = 4;
+                    foreach (var vaultnote in vaultNotes)
+                    {
+                        if (vaultnote.IdVault == vault.Id)
+                        {
+                            foreach (var productConsumption in productConsumptions)
+                            {
+                                if (food.Id == productConsumption.IdFood && vaultnote.Date == productConsumption.Date && vaultnote.Id == productConsumption.IdVaultNote)
+                                {
+
+                                    worksheet.Cells[row, column].Value = productConsumption.FoodCountKid;
+                                    worksheet.Cells[row, column + 1].Value = productConsumption.FoodCountChild;
+                                    column += 2;
+                                }
+                            }
+                        }
+                    }
+
+                }
+
+                // Заполнение суммы KidCount и ChildCount за все дни в ячейки X5 и Y5
+                int totalKidCount = vaultNotes.Sum(v => v.KidCount);
+                int totalChildCount = vaultNotes.Sum(v => v.ChildCount);
+                worksheet.Cells[5, 24].Value = totalKidCount;
+                worksheet.Cells[5, 25].Value = totalChildCount;
+
+                // Заполнение суммы FoodCountKid и FoodCountChild каждого продукта в столбцах X6:X76 и Y6:Y76
+                int rowXY = 6;
+                float? sumkid = 0;
+                float? sumchild = 0;
+                foreach (var vaultnote in vaultNotes)
+                {
+                    if (vaultnote.IdVault == vault.Id)
+                    {
+                        foreach (var food in foods)
+                        {
+                            foreach (var product in productConsumptions)
+                            {
+                                if (food.Id == product.IdFood)
+                                {
+                                    sumkid += product.FoodCountKid;
+                                    sumchild += product.FoodCountChild;
+
+                                }
+                            }
+                            worksheet.Cells[rowXY, 24].Value = sumkid;
+                            worksheet.Cells[rowXY, 25].Value = sumchild;
+                            sumkid = 0;
+                            sumchild = 0;
+                            rowXY++;
+                        }
+                    }
+                    break;
+                }
+
+                // Заполнение суммы FoodCountKid и FoodCountChild каждого продукта в столбце Z6:Z76
+                int rowZ = 6;
+                float? sumFoodCFoodK = 0;
+                foreach (var vaultnote in vaultNotes)
+                {
+                    if (vaultnote.IdVault == vault.Id)
+                    {
+                        foreach (var food in foods)
+                        {
+                            foreach (var product in productConsumptions)
+                            {
+                                if (product.IdFood == food.Id)
+                                {
+
+                                    sumFoodCFoodK += product.FoodCountChild;
+                                    sumFoodCFoodK += product.FoodCountKid;
+
+
+                                }
+                            }
+                            worksheet.Cells[rowZ, 26].Value = sumFoodCFoodK;
+                            sumFoodCFoodK = 0;
+                            rowZ++;
+                        }
+                        break;
+                    }
+                }
+
+                // Заполнение данных из модели PreviousBalance в столбце AA6:AA76
+                row = 6;
+                double? sumbalanceend = 0;
+                foreach (var vaultnote in vaultNotes)
+                {
+                    foreach (var food in foods)
+                    {
+                        if (vaultnote.IdVault == vault.Id)
+                        {
+                            foreach (var balance in previousBalances)
+                            {
+                                if (food.Id == balance.IdFood)
+                                {
+                                    
+                                    sumbalanceend += balance.StartBalance;
+                                }
+                            }
+                            foreach (var arrival in arrivals)
+                            {
+                                if (food.Id == arrival.IdFood)
+                                {
+                                    sumbalanceend += arrival.FoodCount;
+                                }
+                            }
+                            foreach (var product in productConsumptions)
+                            {
+                                if (food.Id == product.IdFood)
+                                {
+                                    sumbalanceend -= product.FoodCountChild;
+                                    sumbalanceend -= product.FoodCountKid;
+                                }
+                            }
+                        }
+
+                        worksheet.Cells[row, 27].Value = sumbalanceend;
+                        sumbalanceend = 0;
+                        row++;
+                    }
+                    break;
+                }
+
+
+                // Сохранение и возврат файла для скачивания
+                var stream = new MemoryStream(package.GetAsByteArray());
+                return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "Export.xlsx");
+            }
+        }
+
+        // Методы для получения данных из базы данных
+        private List<Food> GetFoods()
+        {
+            return _context.Foods.ToList();
+        }
+
+        private List<PreviousBalance> GetPreviousBalances()
+        {
+            return _context.PreviousBalances.ToList();
+        }
+
+        private List<Arrival> GetArrivals()
+        {
+            return _context.Arrivals.ToList();
+        }
+
+        private List<VaultNote> GetVaultNotes()
+        {
+            return _context.VaultNotes.ToList();
+        }
+
+        private List<ProductConsumption> GetProductConsumptions()
+        {
+            return _context.ProductConsumptions.ToList();
+        }
+        
     }
 }

@@ -57,16 +57,35 @@ namespace Diplom.Controllers
             // Расчет конечного остатка на основе начального остатка, приходов и расходов
             foreach (var balance in existingBalances)
             {
+                if (balance.StartBalance == null)
+                {
+                    balance.StartBalance = 0;
+                }
                 var prevBalance = prevBalances?.FirstOrDefault(v => v.IdFood == balance.IdFood);
-                double startBalance = balance.StartBalance.Value + (prevBalance?.EndBalance.Value ?? 0.0);
+                if (prevBalance != null)
+                {
+                    balance.StartBalance = prevBalance.EndBalance.Value;
+                }
+                double originalStartBalance = balance.StartBalance.Value;
+                double originalEndBalance = balance.EndBalance.Value;
+
                 double totalArrival = arrivals.Where(a => a.IdFood == balance.IdFood)
                                               .Sum(a => a.FoodCount ?? 0);
                 double totalConsumption = consumptions.Where(c => c.IdFood == balance.IdFood)
                                                       .Sum(c => (c.FoodCountChild ?? 0) + (c.FoodCountKid ?? 0));
-                double endBalance = (startBalance + totalArrival) - totalConsumption;
+                double endBalance = (originalStartBalance + totalArrival) - totalConsumption;
 
-                balance.EndBalance = endBalance;
-                _context.Update(balance);
+                if (prevBalance != null)
+                {
+                    
+                    balance.EndBalance = endBalance;
+                    _context.Update(balance);
+                }
+                else
+                {
+                    balance.EndBalance = endBalance;
+                    _context.Update(balance);
+                }
             }
             await _context.SaveChangesAsync();
 
@@ -87,7 +106,7 @@ namespace Diplom.Controllers
                 IdFood = v.IdFood,
                 Food = v.Food,
                 VaultNote = v.VaultNote,    
-                StartBalance = v.StartBalance.Value + (prevBalances == null ? 0: prevBalances.FirstOrDefault(a => a.IdFood == v.IdFood) != null? prevBalances.FirstOrDefault(a => a.IdFood == v.IdFood).EndBalance.Value : 0)
+                StartBalance = (prevBalances == null ? 0: prevBalances.FirstOrDefault(a => a.IdFood == v.IdFood) != null? prevBalances.FirstOrDefault(a => a.IdFood == v.IdFood).EndBalance.Value : 0)
             })
             .OrderBy(v => v.Food.NameFood)
             .ToList();

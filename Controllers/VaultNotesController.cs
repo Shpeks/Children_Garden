@@ -24,16 +24,8 @@ namespace Diplom.Controllers
             ViewBag.IdVault = idVault;
             var vaultNotes = _context.VaultNotes
                 .Where(v => v.IdVault == idVault)
-                .Include(vn => vn.PreviousBalance)
-                    .ThenInclude(pb => pb.Food)
-                .Include(vn => vn.Arrivals)
-                    .ThenInclude(a => a.Food)
-                .Include(vn => vn.ProductConsumptions)
-                    .ThenInclude(pc => pc.Food)
+                
                 .ToList();
-
-
-
             return View(vaultNotes);
         }
 

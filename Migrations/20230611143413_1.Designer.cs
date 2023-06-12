@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Diplom.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230610073607_1")]
+    [Migration("20230611143413_1")]
     partial class _1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -1105,7 +1105,7 @@ namespace Diplom.Migrations
                         .IsRequired();
 
                     b.HasOne("Diplom.Models.VaultNote", "VaultNote")
-                        .WithMany("PreviousBalance")
+                        .WithMany("PreviousBalances")
                         .HasForeignKey("IdVaultNote")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1253,7 +1253,7 @@ namespace Diplom.Migrations
                 {
                     b.Navigation("Arrivals");
 
-                    b.Navigation("PreviousBalance");
+                    b.Navigation("PreviousBalances");
 
                     b.Navigation("ProductConsumptions");
                 });

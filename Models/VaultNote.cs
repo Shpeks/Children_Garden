@@ -17,7 +17,7 @@ namespace Diplom.Models
         public int IdVault { get; set; }
         public Vault Vault { get; set; }
         public ICollection<ProductConsumption> ProductConsumptions { get; set; }
-        public ICollection<PreviousBalance> PreviousBalance { get; set; }
+        public ICollection<PreviousBalance> PreviousBalances { get; set; }
         public ICollection<Arrival> Arrivals { get; set; }
         
     }

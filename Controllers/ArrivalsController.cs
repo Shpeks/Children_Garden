@@ -19,7 +19,7 @@ namespace Diplom.Controllers
             _context = context;
         }
 
-        public async Task<IActionResult> Index(int idVaultNote, string searchString)
+        public async Task<IActionResult> Index(int idVaultNote)
         {
             
             var vaultNote = await _context.VaultNotes
@@ -61,12 +61,10 @@ namespace Diplom.Controllers
             var arrivals = await _context.Arrivals
             .Include(a => a.Food)
             .Where(a => a.IdVaultNote == vaultNote.Id)
+            .OrderBy(v => v.Food.NameFood)
             .ToListAsync();
 
-            if (!string.IsNullOrEmpty(searchString))
-            {
-                arrivals = arrivals.Where(a => a.Food.NameFood.Contains(searchString)).ToList();
-            }
+            
 
             return View(arrivals);
         }
