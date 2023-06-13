@@ -1,55 +1,61 @@
 ﻿@model IEnumerable<Diplom.Models.Menu>
+<link rel="stylesheet" href="~/css/Table.css" />
 
 
-<p>
-    <a asp-action="Create">Добавить</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                Название
-            </th>
-            <th>
-                Дата
-            </th>
-            <th>
-                Кому
-            </th>
-            <th>
-                Количество детей
-            </th>
-            <th>
-                Добавил(а)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @item.Name
-            </td>
-            <td>
-                @item.date.ToString("dd.MM.yyyy")
-            </td>
-            <td>
-                @item.ChildHouse
-            </td>
-            <td>
-                @item.ChildCount
-            </td>
-            <td>
-                @item.ApplicationUsers.LastName
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Редактировать</a> 
-                <a asp-action="Index" asp-controller="MenuFoods" asp-route-IdMenu="@item.Id">Детали</a> 
-                <a asp-action="Delete" asp-route-id="@item.Id">Удалить</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+
+
+<div class="container rounded bg-white p-md-5">
+    <div class="h2 ml-2 font-weight-bold">Меню</div>
+
+    <div style="max-height: 600px; overflow-y: auto;">
+        <table class="table">
+            <thead class="sticky-top">
+                <tr class="bg-white">
+                    <th scope="col">Название</th>
+                    <th scope="col">Дата</th>
+                    <th scope="col">Кому</th>
+                    <th scope="col">Детей</th>
+                    <th>Добавил(а)</th>
+                    <th>
+                        <a class="btn btn-sm btn-icon-only icon-color" asp-action="Create" title="Добавить меню">
+                            <i class="bi bi-plus-lg"></i>
+                        </a>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr class="bg-blue">
+                        <td class="pt-2">
+                            <div class=" pl-md-1 mt-2  pl-1 name"> @item.Name</div>
+                        </td>
+                        <td class="pt-3 mt-1">@item.date.ToString("dd.MM.yyyy")</td>
+                        <td class="pt-3">@item.ChildHouse</td>
+                        <td class="pt-3">@item.ChildCount</td>
+                        <td class="pt-3">@item.ApplicationUsers.LastName</td>
+                        <td class="pt-3">
+                            <div class="dropdown position" style="z-index:9999">
+                                <a class="btn btn-sm btn-icon-only icon-color" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <i class='bx bx-dots-vertical-rounded'></i>
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
+                                    <a class="dropdown-item" asp-action="Edit" asp-route-id="@item.Id">Изменить</a>
+                                    <a class="dropdown-item" asp-action="Index" asp-controller="MenuFoods" asp-route-IdMenu="@item.Id">Детали</a>
+                                    <a class="dropdown-item" asp-action="Delete" asp-route-id="@item.Id">Удалить</a>
+                                </div>
+
+                            </div>
+                        </td>
+
+                    </tr>
+                    <tr id="spacing-row">
+                        <td></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
 

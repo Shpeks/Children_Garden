@@ -19,9 +19,15 @@ namespace Diplom.Controllers
             _context = context;
         }
 
-        public async Task<IActionResult> Index(int idVaultNote)
+        public async Task<IActionResult> Index(int? idVaultNote, string searchString)
         {
-            
+            ViewData["CurrentFilter"] = searchString;
+
+            if (idVaultNote == null)
+            {
+                return NotFound();
+            }
+
             var vaultNote = await _context.VaultNotes
                 .Include(v => v.Vault)
                 .FirstOrDefaultAsync(v => v.Id == idVaultNote);
@@ -30,8 +36,10 @@ namespace Diplom.Controllers
             {
                 return NotFound();
             }
+
             int idVault = vaultNote.Vault.Id;
             ViewBag.IdVault = idVault;
+            ViewBag.IdVaultNote = idVaultNote;
 
             // Проверка наличия записи в таблице Arrival для данной VaultNote
             var existingArrivals = await _context.Arrivals
@@ -54,17 +62,22 @@ namespace Diplom.Controllers
 
                     _context.Add(arrival);
                 }
-                
+
                 await _context.SaveChangesAsync();
             }
 
-            var arrivals = await _context.Arrivals
-            .Include(a => a.Food)
-            .Where(a => a.IdVaultNote == vaultNote.Id)
-            .OrderBy(v => v.Food.NameFood)
-            .ToListAsync();
+            var arrivalsQuery = _context.Arrivals
+                .Include(a => a.Food)
+                .Where(a => a.IdVaultNote == vaultNote.Id);
 
-            
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                arrivalsQuery = arrivalsQuery.Where(a => a.Food.NameFood.Contains(searchString));
+            }
+
+            var arrivals = await arrivalsQuery
+                .OrderBy(a => a.Food.NameFood)
+                .ToListAsync();
 
             return View(arrivals);
         }

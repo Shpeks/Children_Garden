@@ -1,8 +1,8 @@
 ﻿@model Diplom.Models.Menu
 @using Diplom.Controllers
 
-@{ 
-    var users = TempData["users"];
+@{
+    var users = TempData["users"] as IEnumerable<MenusController.SelectOptions>;
 }
 <h4>Создание</h4>
 <hr />
@@ -32,27 +32,36 @@
             </div>
             <div class="form-group">
                 <label asp-for="IdUser" class="control-label">Пользователь</label>
-                <select class="form-control" asp-for="IdUser">
-
-                    @if (users != null)
-                    {
-                        foreach (var item in (List<MenusController.SelectOptions>)users)
+                @if (users != null && users.Any())
+                {
+                    <select class="form-control" asp-for="IdUser">
+                        @foreach (var item in users)
                         {
                             <option value="@item.value">@item.Fn @item.Ln</option>
                         }
-                    }
-                </select>
+                    </select>
+                }
+                else
+                {
+                    <p class="text-danger">Нет пользователей с ролью медика.</p>
+                }
             </div>
-            <div class="form-group">
-                <input type="submit" value="Сохранить" class="btn btn-primary" />
+            <div class="form-group" style="display:flex">
+                <div>
+                    <input type="submit" value="Сохранить" class="btn btn-primary" @((users == null || users.Count() == 0) ? "disabled" : "") />
+                </div>
+                <div>
+                    <a asp-action="Index" class="btn">
+                        <i class="bi bi-arrow-return-left"></i>
+                        Вернуться
+                    </a>
+                </div>
             </div>
         </form>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Вернуться</a>
-</div>
+
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

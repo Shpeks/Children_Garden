@@ -13,16 +13,22 @@
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
             <input type="hidden" name="IdMenu" value="@ViewBag.IdMenu" />
-            <div class="form-group">
-                <input type="submit" value="Сохранить" class="btn btn-primary" />
+            <div class="form-group" style="display:flex">
+                <div>
+                    <input type="submit" value="Сохранить" class="btn btn-primary" />
+                </div>
+                <div>
+                    <a asp-action="Create" asp-route-IdMenu="@ViewBag.IdMenu" class="btn">
+                        <i class="bi bi-arrow-return-left"></i>
+                        Вернуться
+                    </a>
+                </div>
             </div>
         </form>
     </div>
 </div>
 
-<div>
-    <a asp-action="Create" asp-route-IdMenu="@ViewBag.IdMenu">Вернуться</a>
-</div>
+
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

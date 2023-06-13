@@ -1,37 +1,94 @@
 ﻿@model IEnumerable<Diplom.Models.MenuFood>
 
-<p>
-    <a href="@Url.Action("Create", "MenuFoods", new { IdMenu = ViewBag.IdMenu })" >Добавить продукт</a>
-</p>
-<p>
-    <a href="@Url.Action("Create", "Meals", new { IdMenu = ViewBag.IdMenu })">Добавить блюдо</a>
-</p>
-<p>
-    <a asp-action="Index" asp-controller="Menus">Вернуться к списку меню</a>
-</p>
-<div id="accordion">
-    <div class="card">
-        <div class="card-header" id="headingOne">
-            <h5 class="mb-0">
-                <button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                    Завтрак
-                </button>
-            </h5>
+<link rel="stylesheet" href="~/css/Table.css" />
+
+
+<style>
+    .custom-cursor {
+        cursor: pointer;
+    }
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const accordions = document.querySelectorAll('.collapsed.custom-cursor');
+
+        accordions.forEach(function (accordion) {
+            const accordionToggle = accordion.querySelector('a');
+            const accordionIcon = accordionToggle.querySelector('i');
+            const accordionCollapse = document.querySelector(accordion.getAttribute('data-bs-target'));
+
+            accordion.addEventListener('click', function () {
+                accordions.forEach(function (otherAccordion) {
+                    if (otherAccordion !== accordion) {
+                        const otherAccordionToggle = otherAccordion.querySelector('a');
+                        const otherAccordionIcon = otherAccordionToggle.querySelector('i');
+                        const otherAccordionCollapse = document.querySelector(otherAccordion.getAttribute('data-bs-target'));
+
+                        otherAccordionToggle.classList.add('collapsed');
+                        otherAccordionIcon.classList.replace('bi-dash-lg', 'bi-plus-lg');
+                        otherAccordionCollapse.classList.remove('show');
+                    }
+                });
+
+                accordionToggle.classList.toggle('collapsed');
+                accordionCollapse.classList.toggle('show');
+
+                if (accordionToggle.classList.contains('collapsed')) {
+                    accordionIcon.classList.replace('bi-plus-lg', 'bi-dash-lg');
+                } else {
+                    accordionIcon.classList.replace('bi-dash-lg', 'bi-plus-lg');
+                }
+            });
+
+            // Установка иконки в зависимости от начального состояния аккордеона
+            if (accordionCollapse.classList.contains('show')) {
+                accordionIcon.classList.replace('bi-plus-lg', 'bi-dash-lg');
+            }
+        });
+    });
+</script>
+
+
+<div class="d-flex justify-content-between my-5">
+    <a asp-action="Index" asp-controller="Menus" class="btn btn-light mr-auto"><i class="bi bi-arrow-left-short"></i>Вернуться к списку меню</a>
+
+    <div class="dropdown show">
+
+        <a class="btn btn-light dropdown" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Функции <i class="bi bi-gear"></i>
+        </a>
+
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+            <a class="dropdown-item" href="@Url.Action("Create", "MenuFoods", new { IdMenu = ViewBag.IdMenu })">Добавить продукт</a>
+            <a class="dropdown-item" href="@Url.Action("Create", "Meals", new { IdMenu = ViewBag.IdMenu })">Добавить блюдо</a>
         </div>
+    </div>
+</div>
 
+
+<div id="accordion">
+    <div>
+        <div id="headingOne" class="collapsed custom-cursor" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+            <a style="font-size: 20px;" class=" mb-0 ml-3">
+                <i class="bi bi-dot"></i> Завтрак
+            </a>
+        </div>
+        <hr />
         <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
-            <div class="card-body">
-                
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>Название</th>
-                            <th>Количество за единицу</th>
-                            <th>Поставка</th>
-                            <th>Код</th>
 
+            <div style="max-height: 300px; overflow-y: auto;">
+                <table class="table">
+                    <thead class="sticky-top">
+                        <tr class="bg-white">
+                            <th scope="col">Название</th>
+                            <th scope="col">Количество за единицу</th>
+                            <th scope="col">Поставка</th>
+                            <th scope="col">Код</th>
                             <th>Единица измерения</th>
-                            <th></th>
+                            <th>
+
+                            </th>
                         </tr>
                     </thead>
                     <tbody>
@@ -41,50 +98,67 @@
                             var unit = group.First().Unit;
 
                             <tr>
-                                <td colspan="7">@meal.Name</td>
+                                <td class="pt-2 font-weight-bold">
+                                    @meal.Name
+                                </td>
+
                             </tr>
 
                             @foreach (var item in group.OrderBy(x => x.Name))
                             {
-                                <tr>
-                                    <td>@item.Name</td>
-                                    <td>@item.CountPerUnit</td>
-                                    <td>@Math.Round(item.Supply, 2)</td>
-                                    <td>@item.Code</td>
+                                <tr class="bg-blue">
+                                    <td class="pt-3">@item.Name</td>
+                                    <td class="pt-3">@item.CountPerUnit</td>
+                                    <td class="pt-3">@Math.Round(item.Supply, 2)</td>
+                                    <td class="pt-3">@item.Code</td>
 
-                                    <td>@item.Unit.Name</td>
+                                    <td class="pt-3">@item.Unit.Name</td>
                                     <td>
-                                        <a href="@Url.Action("Edit", "MenuFoods", new { id = item.Id, IdMenu = item.MenuId })">Редактировать</a>
-                                        <a href="@Url.Action("Delete", "MenuFoods", new { id = item.Id, IdMenu = item.MenuId })">Удалить</a>
+                                        <div style="z-index: 9999;" class="dropdown position">
+                                            <a class="btn btn-sm btn-icon-only icon-color" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                <i class='bx bx-dots-vertical-rounded'></i>
+                                            </a>
+                                            <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
+                                                <a class="dropdown-item" href="@Url.Action("Edit", "MenuFoods", new { id = item.Id, IdMenu = item.MenuId })">Редактировать</a>
+                                                <a class="dropdown-item" href="@Url.Action("Delete", "MenuFoods", new { id = item.Id, IdMenu = item.MenuId })">Удалить</a>
+                                            </div>
+
+                                        </div>
                                     </td>
+                                </tr>
+                                <tr id="spacing-row">
+                                    <td></td>
                                 </tr>
                             }
                         }
+
                     </tbody>
                 </table>
             </div>
-        </div>
-    </div>
-    <div class="card">
-        <div class="card-header" id="headingTwo">
-            <h5 class="mb-0">
-                <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                    2-ой Завтрак
-                </button>
-            </h5>
-        </div>
-        <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
-            <div class="card-body">
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>Название</th>
-                            <th>Количество за единицу</th>
-                            <th>Поставка</th>
-                            <th>Код</th>
 
+        </div>
+
+
+        <div id="headingTwo" class="collapsed custom-cursor" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+            <a style="font-size: 20px;" class=" mb-0 ml-3">
+                <i class="bi bi-dot"></i> 2-ой Завтрак
+            </a>
+        </div>
+        <hr />
+        <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
+
+            <div style="max-height: 300px; overflow-y: auto;">
+                <table class="table">
+                    <thead class="sticky-top">
+                        <tr class="bg-white">
+                            <th scope="col">Название</th>
+                            <th scope="col">Количество за единицу</th>
+                            <th scope="col">Поставка</th>
+                            <th scope="col">Код</th>
                             <th>Единица измерения</th>
-                            <th></th>
+                            <th>
+
+                            </th>
                         </tr>
                     </thead>
                     <tbody>
@@ -94,50 +168,68 @@
                             var unit = group.First().Unit;
 
                             <tr>
-                                <td colspan="7">@meal.Name</td>
+                                <td class="pt-2 font-weight-bold">
+                                    @meal.Name
+                                </td>
+
                             </tr>
 
                             @foreach (var item in group.OrderBy(x => x.Name))
                             {
-                                <tr>
-                                    <td>@item.Name</td>
-                                    <td>@item.CountPerUnit</td>
-                                    <td>@Math.Round(item.Supply, 2)</td>
-                                    <td>@item.Code</td>
+                                <tr class="bg-blue">
+                                    <td class="pt-3">@item.Name</td>
+                                    <td class="pt-3">@item.CountPerUnit</td>
+                                    <td class="pt-3">@Math.Round(item.Supply, 2)</td>
+                                    <td class="pt-3">@item.Code</td>
 
-                                    <td>@item.Unit.Name</td>
+                                    <td class="pt-3">@item.Unit.Name</td>
                                     <td>
-                                        <a href="@Url.Action("Edit", "MenuFoods", new { id = item.Id, IdMenu = item.MenuId })">Редактировать</a>
-                                        <a asp-action="Delete" asp-route-id="@item.Id">Удалить</a>
+                                        <div style="z-index: 9999;" class="dropdown position">
+                                            <a class="btn btn-sm btn-icon-only icon-color" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                <i class='bx bx-dots-vertical-rounded'></i>
+                                            </a>
+                                            <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
+                                                <a class="dropdown-item" href="@Url.Action("Edit", "MenuFoods", new { id = item.Id, IdMenu = item.MenuId })">Редактировать</a>
+                                                <a class="dropdown-item" href="@Url.Action("Delete", "MenuFoods", new { id = item.Id, IdMenu = item.MenuId })">Удалить</a>
+                                            </div>
+
+                                        </div>
                                     </td>
+                                </tr>
+                                <tr id="spacing-row">
+                                    <td></td>
                                 </tr>
                             }
                         }
+
                     </tbody>
                 </table>
             </div>
-        </div>
-    </div>
-    <div class="card">
-        <div class="card-header" id="headingThree">
-            <h5 class="mb-0">
-                <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                    Обед
-                </button>
-            </h5>
-        </div>
-        <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
-            <div class="card-body">
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>Название</th>
-                            <th>Количество за единицу</th>
-                            <th>Поставка</th>
-                            <th>Код</th>
 
+        </div>
+
+
+
+        <div id="headingFoo" class="collapsed custom-cursor" data-toggle="collapse" data-target="#collapseFoo" aria-expanded="false" aria-controls="collapseFoo">
+            <a style="font-size: 20px;" class=" mb-0 ml-3">
+                <i class="bi bi-dot"></i> Обед
+            </a>
+        </div>
+        <hr />
+        <div id="collapseFoo" class="collapse" aria-labelledby="headingFoo" data-parent="#accordion">
+
+            <div style="max-height: 300px; overflow-y: auto;">
+                <table class="table">
+                    <thead class="sticky-top">
+                        <tr class="bg-white">
+                            <th scope="col">Название</th>
+                            <th scope="col">Количество за единицу</th>
+                            <th scope="col">Поставка</th>
+                            <th scope="col">Код</th>
                             <th>Единица измерения</th>
-                            <th></th>
+                            <th>
+
+                            </th>
                         </tr>
                     </thead>
                     <tbody>
@@ -147,50 +239,67 @@
                             var unit = group.First().Unit;
 
                             <tr>
-                                <td colspan="7">@meal.Name</td>
+                                <td class="pt-2 font-weight-bold">
+                                    @meal.Name
+                                </td>
+
                             </tr>
 
                             @foreach (var item in group.OrderBy(x => x.Name))
                             {
-                                <tr>
-                                    <td>@item.Name</td>
-                                    <td>@item.CountPerUnit</td>
-                                    <td>@Math.Round(item.Supply, 2)</td>
-                                    <td>@item.Code</td>
+                                <tr class="bg-blue">
+                                    <td class="pt-3">@item.Name</td>
+                                    <td class="pt-3">@item.CountPerUnit</td>
+                                    <td class="pt-3">@Math.Round(item.Supply, 2)</td>
+                                    <td class="pt-3">@item.Code</td>
 
-                                    <td>@item.Unit.Name</td>
+                                    <td class="pt-3">@item.Unit.Name</td>
                                     <td>
-                                        <a href="@Url.Action("Edit", "MenuFoods", new { id = item.Id, IdMenu = item.MenuId })">Редактировать</a>
-                                        <a asp-action="Delete" asp-route-id="@item.Id">Удалить</a>
+                                        <div style="z-index: 9999;" class="dropdown position">
+                                            <a class="btn btn-sm btn-icon-only icon-color" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                <i class='bx bx-dots-vertical-rounded'></i>
+                                            </a>
+                                            <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
+                                                <a class="dropdown-item" href="@Url.Action("Edit", "MenuFoods", new { id = item.Id, IdMenu = item.MenuId })">Редактировать</a>
+                                                <a class="dropdown-item" href="@Url.Action("Delete", "MenuFoods", new { id = item.Id, IdMenu = item.MenuId })">Удалить</a>
+                                            </div>
+
+                                        </div>
                                     </td>
+                                </tr>
+                                <tr id="spacing-row">
+                                    <td></td>
                                 </tr>
                             }
                         }
+
                     </tbody>
                 </table>
             </div>
-        </div>
-    </div>
-    <div class="card">
-        <div class="card-header" id="headingFour">
-            <h5 class="mb-0">
-                <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
-                    Полдник
-                </button>
-            </h5>
-        </div>
-        <div id="collapseFour" class="collapse" aria-labelledby="headingFour" data-parent="#accordion">
-            <div class="card-body">
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>Название</th>
-                            <th>Количество за единицу</th>
-                            <th>Поставка</th>
-                            <th>Код</th>
 
+        </div>
+
+
+        <div id="headingFive" class="collapsed custom-cursor" data-toggle="collapse" data-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+            <a style="font-size: 20px;" class=" mb-0 ml-3">
+                <i class="bi bi-dot"></i> Полдник
+            </a>
+        </div>
+        <hr />
+        <div id="collapseFive" class="collapse" aria-labelledby="headingFive" data-parent="#accordion">
+
+            <div style="max-height: 300px; overflow-y: auto;">
+                <table class="table">
+                    <thead class="sticky-top">
+                        <tr class="bg-white">
+                            <th scope="col">Название</th>
+                            <th scope="col">Количество за единицу</th>
+                            <th scope="col">Поставка</th>
+                            <th scope="col">Код</th>
                             <th>Единица измерения</th>
-                            <th></th>
+                            <th>
+
+                            </th>
                         </tr>
                     </thead>
                     <tbody>
@@ -200,50 +309,67 @@
                             var unit = group.First().Unit;
 
                             <tr>
-                                <td colspan="7">@meal.Name</td>
+                                <td class="pt-2 font-weight-bold">
+                                    @meal.Name
+                                </td>
+
                             </tr>
 
                             @foreach (var item in group.OrderBy(x => x.Name))
                             {
-                                <tr>
-                                    <td>@item.Name</td>
-                                    <td>@item.CountPerUnit</td>
-                                    <td>@Math.Round(item.Supply, 2)</td>
-                                    <td>@item.Code</td>
+                                <tr class="bg-blue">
+                                    <td class="pt-3">@item.Name</td>
+                                    <td class="pt-3">@item.CountPerUnit</td>
+                                    <td class="pt-3">@Math.Round(item.Supply, 2)</td>
+                                    <td class="pt-3">@item.Code</td>
 
-                                    <td>@item.Unit.Name</td>
+                                    <td class="pt-3">@item.Unit.Name</td>
                                     <td>
-                                        <a href="@Url.Action("Edit", "MenuFoods", new { id = item.Id, IdMenu = item.MenuId })">Редактировать</a>
-                                        <a asp-action="Delete" asp-route-id="@item.Id">Удалить</a>
+                                        <div style="z-index: 9999;" class="dropdown position">
+                                            <a class="btn btn-sm btn-icon-only icon-color" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                <i class='bx bx-dots-vertical-rounded'></i>
+                                            </a>
+                                            <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
+                                                <a class="dropdown-item" href="@Url.Action("Edit", "MenuFoods", new { id = item.Id, IdMenu = item.MenuId })">Редактировать</a>
+                                                <a class="dropdown-item" href="@Url.Action("Delete", "MenuFoods", new { id = item.Id, IdMenu = item.MenuId })">Удалить</a>
+                                            </div>
+
+                                        </div>
                                     </td>
+                                </tr>
+                                <tr id="spacing-row">
+                                    <td></td>
                                 </tr>
                             }
                         }
+
                     </tbody>
                 </table>
             </div>
-        </div>
-    </div>
-    <div class="card">
-        <div class="card-header" id="headingFive">
-            <h5 class="mb-0">
-                <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
-                    Ужин
-                </button>
-            </h5>
-        </div>
-        <div id="collapseFive" class="collapse" aria-labelledby="headingFive" data-parent="#accordion">
-            <div class="card-body">
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>Название</th>
-                            <th>Количество за единицу</th>
-                            <th>Поставка</th>
-                            <th>Код</th>
 
+        </div>
+
+
+        <div id="headingSex" class="collapsed custom-cursor" data-toggle="collapse" data-target="#collapseSex" aria-expanded="false" aria-controls="collapseSex">
+            <a style="font-size: 20px;" class=" mb-0 ml-3">
+                <i class="bi bi-dot"></i> Ужин
+            </a>
+        </div>
+        <hr />
+        <div id="collapseSex" class="collapse" aria-labelledby="headingSex" data-parent="#accordion">
+
+            <div style="max-height: 300px; overflow-y: auto;">
+                <table class="table">
+                    <thead class="sticky-top">
+                        <tr class="bg-white">
+                            <th scope="col">Название</th>
+                            <th scope="col">Количество за единицу</th>
+                            <th scope="col">Поставка</th>
+                            <th scope="col">Код</th>
                             <th>Единица измерения</th>
-                            <th></th>
+                            <th>
+
+                            </th>
                         </tr>
                     </thead>
                     <tbody>
@@ -253,46 +379,66 @@
                             var unit = group.First().Unit;
 
                             <tr>
-                                <td colspan="7">@meal.Name</td>
+                                <td class="pt-2 font-weight-bold">
+                                    @meal.Name
+                                </td>
+
                             </tr>
 
                             @foreach (var item in group.OrderBy(x => x.Name))
                             {
-                                <tr>
-                                    <td>@item.Name</td>
-                                    <td>@item.CountPerUnit</td>
-                                    <td>@Math.Round(item.Supply, 2)</td>
-                                    <td>@item.Code</td>
+                                <tr class="bg-blue">
+                                    <td class="pt-3">@item.Name</td>
+                                    <td class="pt-3">@item.CountPerUnit</td>
+                                    <td class="pt-3">@Math.Round(item.Supply, 2)</td>
+                                    <td class="pt-3">@item.Code</td>
 
-                                    <td>@item.Unit.Name</td>
+                                    <td class="pt-3">@item.Unit.Name</td>
                                     <td>
-                                        <a href="@Url.Action("Edit", "MenuFoods", new { id = item.Id, IdMenu = item.MenuId })">Редактировать</a>
-                                        <a asp-action="Delete" asp-route-id="@item.Id">Удалить</a>
+                                        <div style="z-index: 9999;" class="dropdown position">
+                                            <a class="btn btn-sm btn-icon-only icon-color" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                <i class='bx bx-dots-vertical-rounded'></i>
+                                            </a>
+                                            <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
+                                                <a class="dropdown-item" href="@Url.Action("Edit", "MenuFoods", new { id = item.Id, IdMenu = item.MenuId })">Редактировать</a>
+                                                <a class="dropdown-item" href="@Url.Action("Delete", "MenuFoods", new { id = item.Id, IdMenu = item.MenuId })">Удалить</a>
+                                            </div>
+
+                                        </div>
                                     </td>
+                                </tr>
+                                <tr id="spacing-row">
+                                    <td></td>
                                 </tr>
                             }
                         }
+
                     </tbody>
                 </table>
             </div>
+
         </div>
-    </div>
-    <div class="card">
-        <div class="card-header" id="headingSix">
-            <h5 class="mb-0">
-                <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseSix" aria-expanded="false" aria-controls="collapseSix">
-                    Общий подсчет
-                </button>
-            </h5>
+
+
+
+        <div id="headingSeven" class="collapsed custom-cursor" data-toggle="collapse" data-target="#collapseSeven" aria-expanded="false" aria-controls="collapseSeven">
+            <a style="font-size: 20px;" class=" mb-0 ml-3">
+                <i class="bi bi-dot"></i> Общий подсчет
+            </a>
         </div>
-        <div id="collapseSix" class="collapse" aria-labelledby="headingSix" data-parent="#accordion">
-            <div class="card-body">
+        <hr />
+        <div id="collapseSeven" class="collapse" aria-labelledby="headingSeven" data-parent="#accordion">
+
+            <div style="max-height: 300px; overflow-y: auto;">
                 <table class="table">
-                    <thead>
-                        <tr>
-                            <th>Название</th>
-                            <th>Общее количество за единицу</th>
-                            <th>Общая поставка</th>
+                    <thead class="sticky-top">
+                        <tr class="bg-white">
+                            <th scope="col">Название</th>
+                            <th scope="col">Количество за единицу</th>
+                            <th scope="col">Общая поставка</th>
+                            <th>
+
+                            </th>
                         </tr>
                     </thead>
                     <tbody>
@@ -301,17 +447,22 @@
                             var totalPerUnit = group.Sum(x => x.CountPerUnit);
                             var totalSupply = group.Sum(x => x.Supply);
 
-                            <tr>
-                                <td>@group.Key</td>
-                                <td>@totalPerUnit</td>
-                                <td>@Math.Round(totalSupply, 2)</td>
+                            <tr class="bg-blue">
+                                <td class="pt-3">@group.Key</td>
+                                <td class="pt-3">@totalPerUnit</td>
+                                <td class="pt-3">@Math.Round(totalSupply, 2)</td>
+                            </tr>
+                            <tr id="spacing-row">
+                                <td></td>
                             </tr>
                         }
+
+
                     </tbody>
                 </table>
             </div>
+
         </div>
     </div>
 </div>
-
 

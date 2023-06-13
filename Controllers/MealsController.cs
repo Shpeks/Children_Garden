@@ -51,17 +51,17 @@ namespace Diplom.Controllers
             return View(meals);
         }
 
-        
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Meal meal, MenuFood menuFood, int IdMenu)
         {
-            
+
             if (ModelState.IsValid)
             {
                 _context.Add(meal);
                 await _context.SaveChangesAsync();
-                return RedirectToAction("Index", "MenuFoods", new { IdMenu = IdMenu });
+                return RedirectToAction("Create", new { IdMenu = IdMenu });
             }
             ViewBag.IdMenu = IdMenu;
             return View(meal);
@@ -84,7 +84,7 @@ namespace Diplom.Controllers
             return View(meal);
         }
 
-        
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, Meal meal, int IdMenu)
