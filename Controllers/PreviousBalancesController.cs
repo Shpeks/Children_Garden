@@ -20,11 +20,22 @@ namespace Diplom.Controllers
         }
 
         
-        public async Task<IActionResult> Index(PreviousBalance previousBalance, int idVaultNote)
+        public async Task<IActionResult> Index([FromQuery] string searchString, [FromQuery] int idVaultNote)
         {
+            ViewBag.IdVaultNote = idVaultNote;
             var vaultNote = await _context.VaultNotes
                 .Include(v => v.Vault)
                 .FirstOrDefaultAsync(v => v.Id == idVaultNote);
+
+            var balancesQuery = _context.PreviousBalances
+                .Include(a => a.Food)
+                .Where(a => a.IdVaultNote == vaultNote.Id);
+
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                balancesQuery = balancesQuery.Where(a => a.Food.NameFood.Contains(searchString));
+            }
+
 
             if (vaultNote == null)
             {
@@ -94,11 +105,11 @@ namespace Diplom.Controllers
                 .OrderBy(v => v.Date)
                 .FirstOrDefaultAsync();
 
-            var balancess = _context.PreviousBalances
-            .Include(a => a.Food)
-            .Where(a => a.IdVaultNote == vaultNote.Id)
-            .ToList()
-            .Select(v => new PreviousBalance
+            var balances = await balancesQuery
+                .OrderBy(v => v.Food.NameFood)
+                .ToListAsync();
+
+            var balancess = balances.Select(v => new PreviousBalance
             {
                 Id = v.Id,
                 EndBalance = v.EndBalance,
