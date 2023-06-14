@@ -20,8 +20,10 @@ namespace Diplom.Controllers
         }
 
         // GET: ProductConsumptions
-        public async Task<IActionResult> Index(int idVaultNote)
+        public async Task<IActionResult> Index(int idVaultNote, string searchString)
         {
+            ViewData["CurrentFilter"] = searchString;
+
             var vaultNote = await _context.VaultNotes
                 .Include(v => v.Vault)
                 .FirstOrDefaultAsync(v => v.Id == idVaultNote);
@@ -32,6 +34,7 @@ namespace Diplom.Controllers
             }
             int idVault = vaultNote.Vault.Id;
             ViewBag.IdVault = idVault;
+            
 
             // Проверка наличия записи в таблице Product для данной VaultNote
             var existingProducts = await _context.ProductConsumptions
@@ -58,12 +61,19 @@ namespace Diplom.Controllers
 
                 await _context.SaveChangesAsync();
             }
+            var productsQuery = _context.ProductConsumptions
+                .Include(p => p.Food)
+                .Where(p => p.IdVaultNote == vaultNote.Id);
 
-            var product = await _context.ProductConsumptions
-            .Include(a => a.Food)
-            .Where(a => a.IdVaultNote == vaultNote.Id)
-            .OrderBy(v => v.Food.NameFood)
-            .ToListAsync();
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                productsQuery = productsQuery.Where(p => p.Food.NameFood.Contains(searchString));
+            }
+
+            var product = await productsQuery
+                .OrderBy(p => p.Food.NameFood)
+                .ToListAsync();
+            
 
             return View(product);
         }
