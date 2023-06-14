@@ -20,7 +20,7 @@
     <form asp-action="Delete">
         <input type="hidden" asp-for="Id" />
         <button type="submit" name="IdVault" value="@Model.IdVault" class="btn btn-danger">Удалить</button>
-        <a asp-action="Index" asp-route-idVault="@Model.IdVault">Вернуться</a>
+        <a asp-action="Index" class="btn" asp-route-idVault="@Model.IdVault"><i class="bi bi-arrow-return-left"></i>Вернуться</a>
     </form>
 </div>
 

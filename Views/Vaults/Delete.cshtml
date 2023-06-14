@@ -33,10 +33,13 @@
         </dd>
     </dl>
     
-    <form asp-action="Delete">
+    <form asp-action="Delete" style="display:flex">
         <input type="hidden" asp-for="Id" />
+        <div>
+
         <input type="submit" value="Удалить" class="btn btn-danger" /> 
-        <a asp-action="Index">Вернуться</a>
+        </div>
+        <a asp-action="Index" class="btn"><i class="bi bi-arrow-return-left"></i>Вернуться</a>
     </form>
 </div>
 
