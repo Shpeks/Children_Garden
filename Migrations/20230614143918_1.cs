@@ -7,12 +7,8 @@ namespace Diplom.Migrations
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.EnsureSchema(
-                name: "Identity");
-
             migrationBuilder.CreateTable(
                 name: "AspNetUsers",
-                schema: "Identity",
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
@@ -38,7 +34,6 @@ namespace Diplom.Migrations
 
             migrationBuilder.CreateTable(
                 name: "Foods",
-                schema: "Identity",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -52,7 +47,6 @@ namespace Diplom.Migrations
 
             migrationBuilder.CreateTable(
                 name: "Meals",
-                schema: "Identity",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -66,7 +60,6 @@ namespace Diplom.Migrations
 
             migrationBuilder.CreateTable(
                 name: "MealTimes",
-                schema: "Identity",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -80,7 +73,6 @@ namespace Diplom.Migrations
 
             migrationBuilder.CreateTable(
                 name: "Role",
-                schema: "Identity",
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
@@ -95,7 +87,6 @@ namespace Diplom.Migrations
 
             migrationBuilder.CreateTable(
                 name: "Units",
-                schema: "Identity",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -109,7 +100,6 @@ namespace Diplom.Migrations
 
             migrationBuilder.CreateTable(
                 name: "User",
-                schema: "Identity",
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
@@ -124,7 +114,6 @@ namespace Diplom.Migrations
                     table.ForeignKey(
                         name: "FK_User_AspNetUsers_Id",
                         column: x => x.Id,
-                        principalSchema: "Identity",
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
@@ -132,7 +121,6 @@ namespace Diplom.Migrations
 
             migrationBuilder.CreateTable(
                 name: "UserClaims",
-                schema: "Identity",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -147,7 +135,6 @@ namespace Diplom.Migrations
                     table.ForeignKey(
                         name: "FK_UserClaims_AspNetUsers_UserId",
                         column: x => x.UserId,
-                        principalSchema: "Identity",
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -155,7 +142,6 @@ namespace Diplom.Migrations
 
             migrationBuilder.CreateTable(
                 name: "UserLogins",
-                schema: "Identity",
                 columns: table => new
                 {
                     LoginProvider = table.Column<string>(type: "nvarchar(450)", nullable: false),
@@ -169,7 +155,6 @@ namespace Diplom.Migrations
                     table.ForeignKey(
                         name: "FK_UserLogins_AspNetUsers_UserId",
                         column: x => x.UserId,
-                        principalSchema: "Identity",
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -177,7 +162,6 @@ namespace Diplom.Migrations
 
             migrationBuilder.CreateTable(
                 name: "UserTokens",
-                schema: "Identity",
                 columns: table => new
                 {
                     UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
@@ -191,7 +175,6 @@ namespace Diplom.Migrations
                     table.ForeignKey(
                         name: "FK_UserTokens_AspNetUsers_UserId",
                         column: x => x.UserId,
-                        principalSchema: "Identity",
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -199,7 +182,6 @@ namespace Diplom.Migrations
 
             migrationBuilder.CreateTable(
                 name: "RoleClaims",
-                schema: "Identity",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -214,7 +196,6 @@ namespace Diplom.Migrations
                     table.ForeignKey(
                         name: "FK_RoleClaims_Role_RoleId",
                         column: x => x.RoleId,
-                        principalSchema: "Identity",
                         principalTable: "Role",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -222,7 +203,6 @@ namespace Diplom.Migrations
 
             migrationBuilder.CreateTable(
                 name: "UserRoles",
-                schema: "Identity",
                 columns: table => new
                 {
                     UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
@@ -234,14 +214,12 @@ namespace Diplom.Migrations
                     table.ForeignKey(
                         name: "FK_UserRoles_AspNetUsers_UserId",
                         column: x => x.UserId,
-                        principalSchema: "Identity",
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_UserRoles_Role_RoleId",
                         column: x => x.RoleId,
-                        principalSchema: "Identity",
                         principalTable: "Role",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -249,7 +227,6 @@ namespace Diplom.Migrations
 
             migrationBuilder.CreateTable(
                 name: "Menus",
-                schema: "Identity",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -266,7 +243,6 @@ namespace Diplom.Migrations
                     table.ForeignKey(
                         name: "FK_Menus_User_IdUser",
                         column: x => x.IdUser,
-                        principalSchema: "Identity",
                         principalTable: "User",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -274,7 +250,6 @@ namespace Diplom.Migrations
 
             migrationBuilder.CreateTable(
                 name: "Vaults",
-                schema: "Identity",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -290,7 +265,6 @@ namespace Diplom.Migrations
                     table.ForeignKey(
                         name: "FK_Vaults_User_IdUser",
                         column: x => x.IdUser,
-                        principalSchema: "Identity",
                         principalTable: "User",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -298,7 +272,6 @@ namespace Diplom.Migrations
 
             migrationBuilder.CreateTable(
                 name: "MenuFoods",
-                schema: "Identity",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -318,28 +291,24 @@ namespace Diplom.Migrations
                     table.ForeignKey(
                         name: "FK_MenuFoods_Meals_MealId",
                         column: x => x.MealId,
-                        principalSchema: "Identity",
                         principalTable: "Meals",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_MenuFoods_MealTimes_MealTimeId",
                         column: x => x.MealTimeId,
-                        principalSchema: "Identity",
                         principalTable: "MealTimes",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_MenuFoods_Menus_MenuId",
                         column: x => x.MenuId,
-                        principalSchema: "Identity",
                         principalTable: "Menus",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_MenuFoods_Units_UnitId",
                         column: x => x.UnitId,
-                        principalSchema: "Identity",
                         principalTable: "Units",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -347,7 +316,6 @@ namespace Diplom.Migrations
 
             migrationBuilder.CreateTable(
                 name: "VaultNotes",
-                schema: "Identity",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -363,7 +331,6 @@ namespace Diplom.Migrations
                     table.ForeignKey(
                         name: "FK_VaultNotes_Vaults_IdVault",
                         column: x => x.IdVault,
-                        principalSchema: "Identity",
                         principalTable: "Vaults",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -371,7 +338,6 @@ namespace Diplom.Migrations
 
             migrationBuilder.CreateTable(
                 name: "Arrivals",
-                schema: "Identity",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -387,14 +353,12 @@ namespace Diplom.Migrations
                     table.ForeignKey(
                         name: "FK_Arrivals_Foods_IdFood",
                         column: x => x.IdFood,
-                        principalSchema: "Identity",
                         principalTable: "Foods",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Arrivals_VaultNotes_IdVaultNote",
                         column: x => x.IdVaultNote,
-                        principalSchema: "Identity",
                         principalTable: "VaultNotes",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -402,7 +366,6 @@ namespace Diplom.Migrations
 
             migrationBuilder.CreateTable(
                 name: "ChildHouses",
-                schema: "Identity",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -418,7 +381,6 @@ namespace Diplom.Migrations
                     table.ForeignKey(
                         name: "FK_ChildHouses_VaultNotes_VaultNoteId",
                         column: x => x.VaultNoteId,
-                        principalSchema: "Identity",
                         principalTable: "VaultNotes",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
@@ -426,7 +388,6 @@ namespace Diplom.Migrations
 
             migrationBuilder.CreateTable(
                 name: "PreviousBalances",
-                schema: "Identity",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -442,14 +403,12 @@ namespace Diplom.Migrations
                     table.ForeignKey(
                         name: "FK_PreviousBalances_Foods_IdFood",
                         column: x => x.IdFood,
-                        principalSchema: "Identity",
                         principalTable: "Foods",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_PreviousBalances_VaultNotes_IdVaultNote",
                         column: x => x.IdVaultNote,
-                        principalSchema: "Identity",
                         principalTable: "VaultNotes",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -457,7 +416,6 @@ namespace Diplom.Migrations
 
             migrationBuilder.CreateTable(
                 name: "ProductConsumptions",
-                schema: "Identity",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -474,21 +432,18 @@ namespace Diplom.Migrations
                     table.ForeignKey(
                         name: "FK_ProductConsumptions_Foods_IdFood",
                         column: x => x.IdFood,
-                        principalSchema: "Identity",
                         principalTable: "Foods",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_ProductConsumptions_VaultNotes_IdVaultNote",
                         column: x => x.IdVaultNote,
-                        principalSchema: "Identity",
                         principalTable: "VaultNotes",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.InsertData(
-                schema: "Identity",
                 table: "Foods",
                 columns: new[] { "Id", "NameFood" },
                 values: new object[,]
@@ -538,7 +493,6 @@ namespace Diplom.Migrations
                 });
 
             migrationBuilder.InsertData(
-                schema: "Identity",
                 table: "Foods",
                 columns: new[] { "Id", "NameFood" },
                 values: new object[,]
@@ -575,7 +529,6 @@ namespace Diplom.Migrations
                 });
 
             migrationBuilder.InsertData(
-                schema: "Identity",
                 table: "MealTimes",
                 columns: new[] { "Id", "Name" },
                 values: new object[,]
@@ -588,7 +541,6 @@ namespace Diplom.Migrations
                 });
 
             migrationBuilder.InsertData(
-                schema: "Identity",
                 table: "Meals",
                 columns: new[] { "Id", "Name" },
                 values: new object[,]
@@ -604,7 +556,6 @@ namespace Diplom.Migrations
                 });
 
             migrationBuilder.InsertData(
-                schema: "Identity",
                 table: "Meals",
                 columns: new[] { "Id", "Name" },
                 values: new object[,]
@@ -621,7 +572,6 @@ namespace Diplom.Migrations
                 });
 
             migrationBuilder.InsertData(
-                schema: "Identity",
                 table: "Units",
                 columns: new[] { "Id", "Name" },
                 values: new object[,]
@@ -633,25 +583,21 @@ namespace Diplom.Migrations
 
             migrationBuilder.CreateIndex(
                 name: "IX_Arrivals_IdFood",
-                schema: "Identity",
                 table: "Arrivals",
                 column: "IdFood");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Arrivals_IdVaultNote",
-                schema: "Identity",
                 table: "Arrivals",
                 column: "IdVaultNote");
 
             migrationBuilder.CreateIndex(
                 name: "EmailIndex",
-                schema: "Identity",
                 table: "AspNetUsers",
                 column: "NormalizedEmail");
 
             migrationBuilder.CreateIndex(
                 name: "UserNameIndex",
-                schema: "Identity",
                 table: "AspNetUsers",
                 column: "NormalizedUserName",
                 unique: true,
@@ -659,67 +605,56 @@ namespace Diplom.Migrations
 
             migrationBuilder.CreateIndex(
                 name: "IX_ChildHouses_VaultNoteId",
-                schema: "Identity",
                 table: "ChildHouses",
                 column: "VaultNoteId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_MenuFoods_MealId",
-                schema: "Identity",
                 table: "MenuFoods",
                 column: "MealId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_MenuFoods_MealTimeId",
-                schema: "Identity",
                 table: "MenuFoods",
                 column: "MealTimeId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_MenuFoods_MenuId",
-                schema: "Identity",
                 table: "MenuFoods",
                 column: "MenuId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_MenuFoods_UnitId",
-                schema: "Identity",
                 table: "MenuFoods",
                 column: "UnitId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Menus_IdUser",
-                schema: "Identity",
                 table: "Menus",
                 column: "IdUser");
 
             migrationBuilder.CreateIndex(
                 name: "IX_PreviousBalances_IdFood",
-                schema: "Identity",
                 table: "PreviousBalances",
                 column: "IdFood");
 
             migrationBuilder.CreateIndex(
                 name: "IX_PreviousBalances_IdVaultNote",
-                schema: "Identity",
                 table: "PreviousBalances",
                 column: "IdVaultNote");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ProductConsumptions_IdFood",
-                schema: "Identity",
                 table: "ProductConsumptions",
                 column: "IdFood");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ProductConsumptions_IdVaultNote",
-                schema: "Identity",
                 table: "ProductConsumptions",
                 column: "IdVaultNote");
 
             migrationBuilder.CreateIndex(
                 name: "RoleNameIndex",
-                schema: "Identity",
                 table: "Role",
                 column: "NormalizedName",
                 unique: true,
@@ -727,37 +662,31 @@ namespace Diplom.Migrations
 
             migrationBuilder.CreateIndex(
                 name: "IX_RoleClaims_RoleId",
-                schema: "Identity",
                 table: "RoleClaims",
                 column: "RoleId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_UserClaims_UserId",
-                schema: "Identity",
                 table: "UserClaims",
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_UserLogins_UserId",
-                schema: "Identity",
                 table: "UserLogins",
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_UserRoles_RoleId",
-                schema: "Identity",
                 table: "UserRoles",
                 column: "RoleId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_VaultNotes_IdVault",
-                schema: "Identity",
                 table: "VaultNotes",
                 column: "IdVault");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Vaults_IdUser",
-                schema: "Identity",
                 table: "Vaults",
                 column: "IdUser");
         }
@@ -765,84 +694,64 @@ namespace Diplom.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Arrivals",
-                schema: "Identity");
+                name: "Arrivals");
 
             migrationBuilder.DropTable(
-                name: "ChildHouses",
-                schema: "Identity");
+                name: "ChildHouses");
 
             migrationBuilder.DropTable(
-                name: "MenuFoods",
-                schema: "Identity");
+                name: "MenuFoods");
 
             migrationBuilder.DropTable(
-                name: "PreviousBalances",
-                schema: "Identity");
+                name: "PreviousBalances");
 
             migrationBuilder.DropTable(
-                name: "ProductConsumptions",
-                schema: "Identity");
+                name: "ProductConsumptions");
 
             migrationBuilder.DropTable(
-                name: "RoleClaims",
-                schema: "Identity");
+                name: "RoleClaims");
 
             migrationBuilder.DropTable(
-                name: "UserClaims",
-                schema: "Identity");
+                name: "UserClaims");
 
             migrationBuilder.DropTable(
-                name: "UserLogins",
-                schema: "Identity");
+                name: "UserLogins");
 
             migrationBuilder.DropTable(
-                name: "UserRoles",
-                schema: "Identity");
+                name: "UserRoles");
 
             migrationBuilder.DropTable(
-                name: "UserTokens",
-                schema: "Identity");
+                name: "UserTokens");
 
             migrationBuilder.DropTable(
-                name: "Meals",
-                schema: "Identity");
+                name: "Meals");
 
             migrationBuilder.DropTable(
-                name: "MealTimes",
-                schema: "Identity");
+                name: "MealTimes");
 
             migrationBuilder.DropTable(
-                name: "Menus",
-                schema: "Identity");
+                name: "Menus");
 
             migrationBuilder.DropTable(
-                name: "Units",
-                schema: "Identity");
+                name: "Units");
 
             migrationBuilder.DropTable(
-                name: "Foods",
-                schema: "Identity");
+                name: "Foods");
 
             migrationBuilder.DropTable(
-                name: "VaultNotes",
-                schema: "Identity");
+                name: "VaultNotes");
 
             migrationBuilder.DropTable(
-                name: "Role",
-                schema: "Identity");
+                name: "Role");
 
             migrationBuilder.DropTable(
-                name: "Vaults",
-                schema: "Identity");
+                name: "Vaults");
 
             migrationBuilder.DropTable(
-                name: "User",
-                schema: "Identity");
+                name: "User");
 
             migrationBuilder.DropTable(
-                name: "AspNetUsers",
-                schema: "Identity");
+                name: "AspNetUsers");
         }
     }
 }

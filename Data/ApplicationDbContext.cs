@@ -34,7 +34,7 @@ namespace Diplom.Data
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
-            builder.HasDefaultSchema("Identity"); // Задает схему для базы данных
+            builder.HasDefaultSchema(null); // Задает схему для базы данных
             builder.Entity<ApplicationUser>
                 (entity =>
 
