@@ -75,63 +75,41 @@ namespace Diplom.Controllers
             return View(new MenuFood { MenuId = IdMenu }); 
         }
 
-        
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create( MenuFood menuFood, int IdMenu)
+        public async Task<IActionResult> Create(MenuFood menuFood, int IdMenu)
         {
-
             menuFood.MenuId = IdMenu;
-            // Calculate the supply
-            var maxCounts = new Dictionary<int, int>
+            float childCount = await _context.Menus
+                .Where(m => m.Id == IdMenu)
+                .Select(m => m.ChildCount)
+                .FirstOrDefaultAsync();
+
+            menuFood.Supply = (childCount * menuFood.CountPerUnit) / 1000;
+
+            if (ModelState.IsValid)
             {
-                { 1, 3 },
-                { 2, 1 },
-                { 3, 6 },
-                { 4, 2 },
-                { 5, 3 }
-            };
+                
+                _context.Add(menuFood);
 
-            var mealTimeId = menuFood.MealTimeId;
-            if (maxCounts.TryGetValue(mealTimeId, out int maxMenuFoodCount))
-            {
-                var count = await _context.MenuFoods
-                    .CountAsync(mf => mf.MealTimeId == mealTimeId && mf.MenuId == IdMenu);
-
-                if (count < maxMenuFoodCount)
-                {
-                    // Calculate the supply
-                    float childCount = await _context.Menus
-                        .Where(m => m.Id == IdMenu)
-                        .Select(m => m.ChildCount)
-                        .FirstOrDefaultAsync();
-                    menuFood.Supply = (childCount * menuFood.CountPerUnit) / 1000;
-
-                    if (ModelState.IsValid)
-                    {
-                        _context.Add(menuFood);
-                        await _context.SaveChangesAsync();
-                        return RedirectToAction("Index", new { IdMenu = IdMenu });
-                    }
-                }
-                else
-                {
-                    var mealTimeName = await _context.MealTimes
-                        .Where(mt => mt.Id == mealTimeId)
-                        .Select(mt => mt.Name)
-                        .FirstOrDefaultAsync();
-                    ModelState.AddModelError(string.Empty, $"Превышено максимальное количество записей '{mealTimeName}'.");
-                }
+                await _context.SaveChangesAsync();
+                return RedirectToAction("Index", new { IdMenu = IdMenu });
             }
+                
+            
+
             ViewBag.IdMenu = IdMenu;
             ViewData["MealId"] = new SelectList(_context.Meals, "Id", "Name");
             ViewData["MealTimeId"] = new SelectList(_context.MealTimes, "Id", "Name");
             ViewData["MenuId"] = new SelectList(_context.Menus, "Id", "Name");
             ViewData["UnitId"] = new SelectList(_context.Units, "Id", "Name");
-            return View(menuFood);  
+
+            return View(menuFood);
         }
 
-        // GET: MenuFoods/Edit/5
+
+
         public async Task<IActionResult> Edit(int? id, int IdMenu)
         {
             ViewBag.IdMenu = IdMenu;

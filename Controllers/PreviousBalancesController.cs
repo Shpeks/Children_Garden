@@ -94,8 +94,8 @@ namespace Diplom.Controllers
                 }
                 else
                 {
+                    _context.Entry(balance).State = EntityState.Modified;
                     balance.EndBalance = endBalance;
-                    _context.Update(balance);
                 }
             }
             await _context.SaveChangesAsync();

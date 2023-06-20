@@ -16,9 +16,6 @@ namespace Diplom.Controllers
         {
             _context = context;
         }
-
-  
-        
         public IActionResult Index(int? idVault)
         {
             ViewBag.IdVault = idVault;
@@ -54,7 +51,7 @@ namespace Diplom.Controllers
             return View(vaultNote);
         }
 
-        // GET: VaultNotes/Edit/5
+        
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -105,7 +102,7 @@ namespace Diplom.Controllers
             return View(vaultNote);
         }
 
-        // GET: VaultNotes/Delete/5
+        
         public async Task<IActionResult> Delete(int? id, int idVault)
         {
             ViewBag.id = idVault;
@@ -125,7 +122,7 @@ namespace Diplom.Controllers
             return View(vaultNote);
         }
 
-        // POST: VaultNotes/Delete/5
+        
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id, int idVault)
