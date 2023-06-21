@@ -7,7 +7,7 @@ namespace Diplom.Models
     public class PreviousBalance
     {
         public int Id { get; set; }
-        
+        [Required(ErrorMessage = "Не вверные входные данные")]
         public double? StartBalance { get; set; }
         public double? EndBalance { get; set; }
         public int IdVaultNote { get; set; }

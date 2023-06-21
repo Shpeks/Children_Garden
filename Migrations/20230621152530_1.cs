@@ -231,7 +231,6 @@ namespace Diplom.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     date = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ChildHouse = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ChildCount = table.Column<int>(type: "int", nullable: false),
@@ -254,7 +253,6 @@ namespace Diplom.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    VaultName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     DateStart = table.Column<DateTime>(type: "datetime2", nullable: false),
                     DateEnd = table.Column<DateTime>(type: "datetime2", nullable: false),
                     IdUser = table.Column<string>(type: "nvarchar(450)", nullable: true)
@@ -276,9 +274,9 @@ namespace Diplom.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CountPerUnit = table.Column<float>(type: "real", nullable: false),
-                    Supply = table.Column<float>(type: "real", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CountPerUnit = table.Column<double>(type: "float", nullable: false),
+                    Supply = table.Column<double>(type: "float", nullable: false),
                     Code = table.Column<int>(type: "int", nullable: false),
                     MealId = table.Column<int>(type: "int", nullable: false),
                     MealTimeId = table.Column<int>(type: "int", nullable: false),
@@ -344,7 +342,7 @@ namespace Diplom.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Date = table.Column<DateTime>(type: "datetime2", nullable: false),
                     IdFood = table.Column<int>(type: "int", nullable: false),
-                    FoodCount = table.Column<double>(type: "float", nullable: true),
+                    FoodCount = table.Column<double>(type: "float", nullable: false),
                     IdVaultNote = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -365,34 +363,12 @@ namespace Diplom.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ChildHouses",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    NameHouse = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ChildCount = table.Column<int>(type: "int", nullable: false),
-                    IdVaultNote = table.Column<int>(type: "int", nullable: false),
-                    VaultNoteId = table.Column<int>(type: "int", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ChildHouses", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_ChildHouses_VaultNotes_VaultNoteId",
-                        column: x => x.VaultNoteId,
-                        principalTable: "VaultNotes",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "PreviousBalances",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    StartBalance = table.Column<double>(type: "float", nullable: true),
+                    StartBalance = table.Column<double>(type: "float", nullable: false),
                     EndBalance = table.Column<double>(type: "float", nullable: true),
                     IdVaultNote = table.Column<int>(type: "int", nullable: false),
                     IdFood = table.Column<int>(type: "int", nullable: false)
@@ -421,8 +397,8 @@ namespace Diplom.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Date = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    FoodCountChild = table.Column<float>(type: "real", nullable: true),
-                    FoodCountKid = table.Column<float>(type: "real", nullable: true),
+                    FoodCountChild = table.Column<double>(type: "float", nullable: false),
+                    FoodCountKid = table.Column<double>(type: "float", nullable: false),
                     IdFood = table.Column<int>(type: "int", nullable: false),
                     IdVaultNote = table.Column<int>(type: "int", nullable: false)
                 },
@@ -604,11 +580,6 @@ namespace Diplom.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ChildHouses_VaultNoteId",
-                table: "ChildHouses",
-                column: "VaultNoteId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_MenuFoods_MealId",
                 table: "MenuFoods",
                 column: "MealId");
@@ -695,9 +666,6 @@ namespace Diplom.Migrations
         {
             migrationBuilder.DropTable(
                 name: "Arrivals");
-
-            migrationBuilder.DropTable(
-                name: "ChildHouses");
 
             migrationBuilder.DropTable(
                 name: "MenuFoods");

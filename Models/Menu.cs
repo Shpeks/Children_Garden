@@ -10,10 +10,11 @@ namespace Diplom.Models
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
-        public string Name { get; set; }
+        [Required(ErrorMessage = "Не вверные входные данные")]
         [DisplayFormat(DataFormatString = "{0:dd.MM.yyyy}")]
         public DateTime date { get; set; }
         public string ChildHouse { get; set; }
+        [Required(ErrorMessage = "Не вверные входные данные")]
         public int ChildCount { get; set; }
         public string IdUser { get; set; }
         public ICollection<MenuFood> MenuFoods { get; set; }

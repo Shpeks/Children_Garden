@@ -10,9 +10,10 @@ namespace Diplom.Models
         
         [DisplayFormat(DataFormatString = "{0:dd.MM.yyyy}")]
         public DateTime Date { get; set; }
-        
-        public float? FoodCountChild { get; set; }
-        public float? FoodCountKid { get; set; }
+        [Required(ErrorMessage = "Не вверные входные данные")]
+        public double? FoodCountChild { get; set; }
+        [Required(ErrorMessage = "Не вверные входные данные")]
+        public double? FoodCountKid { get; set; }
         public int IdFood { get; set; }
         public int IdVaultNote { get; set; }
         public VaultNote VaultNote { get; set; }

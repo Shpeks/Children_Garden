@@ -10,14 +10,12 @@ namespace Diplom.Data
         public static async Task SeedRolesAsync(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
         {
             //Seed Roles
-           
             await roleManager.CreateAsync(new IdentityRole(Enums.Roles.Admin.ToString()));
             await roleManager.CreateAsync(new IdentityRole(Enums.Roles.Guest.ToString()));
-            await roleManager.CreateAsync(new IdentityRole(Enums.Roles.Employee.ToString()));
             await roleManager.CreateAsync(new IdentityRole(Enums.Roles.Dev.ToString()));
             await roleManager.CreateAsync(new IdentityRole(Enums.Roles.Medic.ToString()));
             await roleManager.CreateAsync(new IdentityRole(Enums.Roles.Fabricator.ToString()));
-            await roleManager.CreateAsync(new IdentityRole(Enums.Roles.Accountant.ToString()));
+            
         }
         public static async Task SeedSuperAdminAsync(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
         {

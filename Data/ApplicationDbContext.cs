@@ -26,7 +26,7 @@ namespace Diplom.Data
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
         public DbSet<Vault> Vaults { get; set; }
         public DbSet<VaultNote> VaultNotes { get; set; }
-        public DbSet<ChildHouse> ChildHouses { get; set; }
+        
         public DbSet<ProductConsumption> ProductConsumptions { get; set; }
         public DbSet<PreviousBalance> PreviousBalances { get; set; }
         public DbSet<Arrival> Arrivals { get; set; }

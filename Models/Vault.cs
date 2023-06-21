@@ -10,7 +10,7 @@ namespace Diplom.Models
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id   { get; set; }
-        public string VaultName { get; set; }
+        
         [DisplayFormat(DataFormatString = "{0:dd.MM.yyyy}")]
         public DateTime DateStart { get; set; }
         [DisplayFormat(DataFormatString = "{0:dd.MM.yyyy}")]

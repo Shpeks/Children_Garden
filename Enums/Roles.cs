@@ -5,9 +5,8 @@
         Dev,
         Admin,
         Guest,
-        Employee,
         Medic,
-        Fabricator,
-        Accountant
+        Fabricator
+        
     }
 }

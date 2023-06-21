@@ -33,22 +33,26 @@ namespace Diplom.Controllers
             var vaults = await _context.Vaults.Include(v => v.ApplicationUsers).ToListAsync();
             return View(vaults);
         }
-
-        
-        public async Task<IActionResult> Create()
-        {
-            ViewData["IdUser"] = new SelectList(_context.ApplicationUsers, "Id", "Id");
-            var fabricatorRoles = await _userManager.GetUsersInRoleAsync("Fabricator");
-            var users = fabricatorRoles.Select(s => new SelectOptions { value = s.Id, Fn = s.FirstName, Ln = s.LastName }).ToList();
-            TempData["users"] = users;
-            return View();
-        }
-
         public record SelectOptions
         {
             public string Fn { get; set; }
             public string Ln { get; set; }
             public string value { get; set; }
+        }
+
+        public async Task<IActionResult> Create()
+        {
+            var roles = await _userManager.GetUsersInRoleAsync("Fabricator");
+            var users = roles
+                .Select(s => new SelectOptions
+                {
+                    value = s.Id,
+                    Fn = s.FirstName,
+                    Ln = s.LastName
+                })
+                .ToList();
+            TempData["users"] = users;
+            return View();
         }
 
         [HttpPost]
@@ -106,7 +110,7 @@ namespace Diplom.Controllers
 
                 return RedirectToAction(nameof(Index));
             }
-
+            ViewData["IdUser"] = new SelectList(_context.ApplicationUsers, "Id", "Id", vault.IdUser);
             await SetCreateViewData();
             return View(vault);
         }
@@ -252,6 +256,7 @@ namespace Diplom.Controllers
                 List<VaultNote> vaultNotes = GetVaultNotes();
                 
                 ExcelWorksheet worksheet = package.Workbook.Worksheets["свод за 10 дней"];
+                worksheet.Cells["A1:AA1"].Merge = true;
                 
                 // Получение данных из модели Food и заполнение столбца A
                 List<Food> foods = GetFoods();
@@ -259,7 +264,25 @@ namespace Diplom.Controllers
                 {
                     worksheet.Cells[i + 6, 1].Value = foods[i].NameFood;
                 }
+                List<Vault> vaults = GetVaults();
+                List<ApplicationUser> users = GetApplicationUsers();
 
+                foreach (var vaultt in vaults)
+                {
+                    if (vaultt.Id == vault.Id)
+                    {
+                        worksheet.Cells[1, 1].Value = $"Расход продуктов по МДОУ 'Детский сад № 63' с {vaultt.DateStart.Date.ToShortDateString()} по {vaultt.DateEnd.Date.ToShortDateString()}";
+                    }
+                    foreach (var user in users)
+                    {
+                        if (vaultt.IdUser == user.Id)
+                        {
+                            worksheet.Cells["F79:G79"].Merge = true;
+                            worksheet.Cells["F79"].Value = user.FirstName + " " + user.LastName;
+                        }
+                    }
+                }
+                
                 // Получение данных из модели PreviousBalance и заполнение столбца B
                 List<PreviousBalance> previousBalances = GetPreviousBalances();
                 double? sumbalance = 0;
@@ -383,8 +406,8 @@ namespace Diplom.Controllers
 
                 // Заполнение суммы FoodCountKid и FoodCountChild каждого продукта в столбцах X6:X76 и Y6:Y76
                 int rowXY = 6;
-                float? sumkid = 0;
-                float? sumchild = 0;
+                double? sumkid = 0;
+                double? sumchild = 0;
                 foreach (var vaultnote in vaultNotes)
                 {
                     if (vaultnote.IdVault == vault.Id)
@@ -412,7 +435,7 @@ namespace Diplom.Controllers
 
                 // Заполнение суммы FoodCountKid и FoodCountChild каждого продукта в столбце Z6:Z76
                 int rowZ = 6;
-                float? sumFoodCFoodK = 0;
+                double? sumFoodCFoodK = 0;
                 foreach (var vaultnote in vaultNotes)
                 {
                     if (vaultnote.IdVault == vault.Id)
@@ -423,11 +446,8 @@ namespace Diplom.Controllers
                             {
                                 if (product.IdFood == food.Id)
                                 {
-
                                     sumFoodCFoodK += product.FoodCountChild;
                                     sumFoodCFoodK += product.FoodCountKid;
-
-
                                 }
                             }
                             worksheet.Cells[rowZ, 26].Value = sumFoodCFoodK;
@@ -487,6 +507,10 @@ namespace Diplom.Controllers
         }
 
         // Методы для получения данных из базы данных
+        private List<Vault> GetVaults()
+        {
+            return _context.Vaults.ToList();
+        }
         private List<Food> GetFoods()
         {
             return _context.Foods.ToList();
@@ -511,6 +535,9 @@ namespace Diplom.Controllers
         {
             return _context.ProductConsumptions.ToList();
         }
-        
+        private List<ApplicationUser> GetApplicationUsers()
+        {
+            return _context.ApplicationUsers.ToList();
+        }
     }
 }

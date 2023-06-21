@@ -10,6 +10,7 @@ namespace Diplom.Models
         [DisplayFormat(DataFormatString = "{0:dd.MM.yyyy}")]
         public DateTime Date { get; set; }
         public int IdFood { get; set; }
+        [Required(ErrorMessage = "Не вверные входные данные")]
         public double? FoodCount { get; set; }
         public int IdVaultNote { get; set; }
         public VaultNote VaultNote { get; set; }

@@ -30,6 +30,7 @@ namespace Diplom.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<double?>("FoodCount")
+                        .IsRequired()
                         .HasColumnType("float");
 
                     b.Property<int>("IdFood")
@@ -45,32 +46,6 @@ namespace Diplom.Migrations
                     b.HasIndex("IdVaultNote");
 
                     b.ToTable("Arrivals");
-                });
-
-            modelBuilder.Entity("Diplom.Models.ChildHouse", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("ChildCount")
-                        .HasColumnType("int");
-
-                    b.Property<int>("IdVaultNote")
-                        .HasColumnType("int");
-
-                    b.Property<string>("NameHouse")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("VaultNoteId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("VaultNoteId");
-
-                    b.ToTable("ChildHouses");
                 });
 
             modelBuilder.Entity("Diplom.Models.Food", b =>
@@ -605,9 +580,6 @@ namespace Diplom.Migrations
                     b.Property<string>("IdUser")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<DateTime>("date")
                         .HasColumnType("datetime2");
 
@@ -628,8 +600,8 @@ namespace Diplom.Migrations
                     b.Property<int>("Code")
                         .HasColumnType("int");
 
-                    b.Property<float>("CountPerUnit")
-                        .HasColumnType("real");
+                    b.Property<double>("CountPerUnit")
+                        .HasColumnType("float");
 
                     b.Property<int>("MealId")
                         .HasColumnType("int");
@@ -641,10 +613,11 @@ namespace Diplom.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<float>("Supply")
-                        .HasColumnType("real");
+                    b.Property<double>("Supply")
+                        .HasColumnType("float");
 
                     b.Property<int>("UnitId")
                         .HasColumnType("int");
@@ -679,6 +652,7 @@ namespace Diplom.Migrations
                         .HasColumnType("int");
 
                     b.Property<double?>("StartBalance")
+                        .IsRequired()
                         .HasColumnType("float");
 
                     b.HasKey("Id");
@@ -700,11 +674,13 @@ namespace Diplom.Migrations
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
-                    b.Property<float?>("FoodCountChild")
-                        .HasColumnType("real");
+                    b.Property<double?>("FoodCountChild")
+                        .IsRequired()
+                        .HasColumnType("float");
 
-                    b.Property<float?>("FoodCountKid")
-                        .HasColumnType("real");
+                    b.Property<double?>("FoodCountKid")
+                        .IsRequired()
+                        .HasColumnType("float");
 
                     b.Property<int>("IdFood")
                         .HasColumnType("int");
@@ -768,9 +744,6 @@ namespace Diplom.Migrations
 
                     b.Property<string>("IdUser")
                         .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("VaultName")
-                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -1035,15 +1008,6 @@ namespace Diplom.Migrations
                         .IsRequired();
 
                     b.Navigation("Food");
-
-                    b.Navigation("VaultNote");
-                });
-
-            modelBuilder.Entity("Diplom.Models.ChildHouse", b =>
-                {
-                    b.HasOne("Diplom.Models.VaultNote", "VaultNote")
-                        .WithMany()
-                        .HasForeignKey("VaultNoteId");
 
                     b.Navigation("VaultNote");
                 });

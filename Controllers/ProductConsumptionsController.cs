@@ -99,7 +99,7 @@ namespace Diplom.Controllers
         // GET: ProductConsumptions/Create
         public IActionResult Create()
         {
-            ViewData["IdChildHouse"] = new SelectList(_context.ChildHouses, "ChildHouseId", "ChildHouseId");
+            
             return View();
         }
 
@@ -113,7 +113,7 @@ namespace Diplom.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["IdChildHouse"] = new SelectList(_context.ChildHouses, "ChildHouseId", "ChildHouseId");
+            
             return View(productConsumption);
         }
 
@@ -130,7 +130,7 @@ namespace Diplom.Controllers
             {
                 return NotFound();
             }
-            ViewData["IdChildHouse"] = new SelectList(_context.ChildHouses, "ChildHouseId", "ChildHouseId");
+            
             return View(productConsumption);
         }
 

@@ -34,8 +34,8 @@ namespace Diplom.Controllers
             
 
             // Calculate the supply
-            float childCount = await _context.Menus.Where(m => m.Id == IdMenu).Select(m => m.ChildCount).FirstOrDefaultAsync();
-            float totalSupply = await applicationDbContext.SumAsync(m => (childCount * m.CountPerUnit) / 1000);
+            double childCount = await _context.Menus.Where(m => m.Id == IdMenu).Select(m => m.ChildCount).FirstOrDefaultAsync();
+            double totalSupply = await applicationDbContext.SumAsync(m => (childCount * m.CountPerUnit) / 1000);
             ViewBag.TotalSupply = totalSupply;
 
             return View(await applicationDbContext.ToListAsync());

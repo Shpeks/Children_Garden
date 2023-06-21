@@ -9,9 +9,13 @@ namespace Diplom.Models
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
+        [Required(ErrorMessage = "Не вверные входные данные или пустое поле")]
         public string Name { get; set; }
-        public float CountPerUnit { get; set; }
-        public float Supply { get; set; }
+        [Required(ErrorMessage = "Не вверные входные данные")]
+        public double CountPerUnit { get; set; }
+        [Required(ErrorMessage = "Не вверные входные данные")]
+        public double Supply { get; set; }
+        [Required(ErrorMessage = "Не вверные входные данные")]
         public int Code { get; set; }
         public int MealId { get; set; }
         public int MealTimeId { get; set; }

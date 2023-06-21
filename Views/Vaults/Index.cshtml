@@ -7,9 +7,7 @@
         <table class="table">
             <thead class="sticky-top">
                 <tr class="bg-white">
-                    <th scope="col">
-                        Название
-                    </th>
+                    
                     <th scope="col">
                         Дата начала
                     </th>
@@ -30,9 +28,7 @@
                 @foreach (var item in Model)
                 {
                     <tr class="bg-blue">
-                        <td class="pt-3">
-                            @Html.DisplayFor(modelItem => item.VaultName)
-                        </td>
+                        
                         <td class="pt-3">
                             @Html.DisplayFor(modelItem => item.DateStart)
                         </td>
@@ -40,7 +36,7 @@
                             @Html.DisplayFor(modelItem => item.DateEnd)
                         </td>
                         <td class="pt-3">
-                            @Html.DisplayFor(modelItem => item.ApplicationUsers.FirstName)
+                            @Html.DisplayFor(modelItem => item.ApplicationUsers.LastName)
                         </td>
                         <td class="pt-3">
                             <div class="dropdown position-static">

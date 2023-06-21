@@ -9,14 +9,15 @@
     <div class="col-md-4">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" name="IdMenu" value="@ViewBag.IdMenu" />            <div class="form-group">
+            <input type="hidden" name="IdMenu" value="@ViewBag.IdMenu" />            
+            <div class="form-group">
                 <label asp-for="Name" class="control-label">Название продукта</label>
-                <input asp-for="Name" class="form-control" />
+                <input asp-for="Name" type="text" class="form-control" />
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="CountPerUnit" class="control-label">Количество за единицу</label>
-                <input asp-for="CountPerUnit" class="form-control" />
+                <input asp-for="CountPerUnit" type="number" class="form-control" />
                 <span asp-validation-for="CountPerUnit" class="text-danger"></span>
             </div>
 
@@ -27,7 +28,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="Code" class="control-label">Код</label>
-                <input asp-for="Code" value="0" class="form-control" />
+                <input asp-for="Code" type="number" value="0" class="form-control" />
                 <span asp-validation-for="Code" class="text-danger"></span>
             </div>
             <div class="form-group">
